@@ -7,38 +7,42 @@
       "dom.iterable",
       "esnext"
     ],
+    "moduleResolution": "node",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "src/*"
       ],
-      "@/components": [
+      "@components": [
         "src/components/*"
       ],
-      "@/constants": [
+      "@constants": [
         "src/constants/*"
       ],
-      "@/domain": [
+      "@domain": [
         "src/domain/*"
       ],
-      "@/hocs": [
+      "@hocs": [
         "src/hocs/*"
       ],
-      "@/operations": [
+      "@operations": [
         "src/operations/*"
       ],
-      "@/pages": [
+      "@pages": [
         "src/pages/*"
+      ],
+      "@icons": [
+        "public/icons/*"
       ]
     }
   },
