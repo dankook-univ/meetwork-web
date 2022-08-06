@@ -1,10 +1,13 @@
 import React from 'react';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
+
 import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
 
-interface IndexProps {}
+interface IndexProps {
+  kakaoClientId: string;
+}
 
-const Index: NextPage<IndexProps> = () => {
+const Index: NextPage<IndexProps> = ({ kakaoClientId }) => {
   return (
     <div className="flex flex-col min-w-screen min-h-screen p-[26px] items-center justify-center bg-gradient-to-b from-mint to-primary">
       <section className="flex flex-1 items-center justify-center">
@@ -12,10 +15,18 @@ const Index: NextPage<IndexProps> = () => {
       </section>
 
       <section className="flex flex-1 items-center justify-center">
-        <KakaoLoginButton />
+        <KakaoLoginButton kakaoClientId={kakaoClientId} />
       </section>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {
+      kakaoClientId: process.env.KAKAO_CLIENT_ID,
+    },
+  };
 };
 
 export default Index;
