@@ -5,10 +5,7 @@ const UserIcon: React.FC = () => {
   const router = useRouter();
 
   const color = useMemo<string>(
-    () =>
-      router.pathname.replace('/workspace', '').startsWith('/me')
-        ? '#9BD1DD'
-        : '#ECECEC',
+    () => (router.pathname.startsWith('/me') ? '#9BD1DD' : '#ECECEC'),
     [router?.pathname],
   );
 

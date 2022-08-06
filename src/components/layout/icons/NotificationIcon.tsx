@@ -5,10 +5,7 @@ const NotificationIcon: React.FC = () => {
   const router = useRouter();
 
   const color = useMemo<string>(
-    () =>
-      router.pathname.replace('/workspace', '').startsWith('/notification')
-        ? '#9BD1DD'
-        : '#ECECEC',
+    () => (router.pathname.startsWith('/notification') ? '#9BD1DD' : '#ECECEC'),
     [router?.pathname],
   );
 

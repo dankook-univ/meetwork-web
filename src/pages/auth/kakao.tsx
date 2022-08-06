@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+
 import { KakaoCodeResponse, KakaoTokenResponse } from '@/domain/auth/kakao';
+import { login } from '@/operations/auth/login';
 
 interface KakaoProps {
   kakaoClientId: string;
@@ -42,7 +44,20 @@ const Kakao: NextPage<KakaoProps> = ({ kakaoClientId }) => {
 
   useEffect(() => {
     if (token !== null) {
-      router.replace('/workspace');
+      login({ token, type: 'kakao' })
+        .then(() => {
+          router.replace('/');
+        })
+        .catch((e: AxiosError) => {
+          if (e.response?.status === 401) {
+            router.replace({
+              pathname: '/auth/new',
+              query: { token, type: 'kakao' },
+            });
+          } else {
+            console.error(e);
+          }
+        });
     }
   }, [router, token]);
 

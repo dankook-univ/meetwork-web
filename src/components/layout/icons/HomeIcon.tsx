@@ -6,8 +6,8 @@ const HomeIcon: React.FC = () => {
 
   const color = useMemo<string>(
     () =>
-      !router.pathname.replace('/workspace', '').startsWith('/notification') &&
-      !router.pathname.replace('/workspace', '').startsWith('/me')
+      !router.pathname.startsWith('/notification') &&
+      !router.pathname.startsWith('/me')
         ? '#9BD1DD'
         : '#ECECEC',
     [router?.pathname],
