@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { KakaoCodeResponse, KakaoTokenResponse } from '@/domain/auth/kakao';
 
 interface KakaoProps {
   kakaoClientId: string;
@@ -12,14 +13,14 @@ const Kakao: NextPage<KakaoProps> = ({ kakaoClientId }) => {
 
   const [token, setToken] = useState<string | null>(null);
   const code = useMemo<string>(
-    () => router.query?.code as string,
+    () => (router.query as KakaoCodeResponse)?.code as string,
     [router.query],
   );
 
   useEffect(() => {
     if (code?.length > 0) {
       axios
-        .post(
+        .post<KakaoTokenResponse>(
           `https://kauth.kakao.com/oauth/token?${new URLSearchParams({
             grant_type: 'authorization_code',
             client_id: kakaoClientId,
