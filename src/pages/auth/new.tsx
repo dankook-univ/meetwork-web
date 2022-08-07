@@ -2,10 +2,12 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 
-import CustomInput from '@/components/form/CustomInput';
-import CustomButton from '@/components/button/CustomButton';
 import { signUp } from '@/operations/auth/sign-up';
 import { withoutAuthSSR } from '@/utils/session/withoutAuth';
+import { instance } from '@/config/axios';
+
+import CustomInput from '@/components/form/CustomInput';
+import CustomButton from '@/components/button/CustomButton';
 
 const emailReg = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
@@ -25,11 +27,15 @@ const New: NextPage = () => {
   const handleOnClick = useCallback(async () => {
     const { type, token } = router.query as { type: 'kakao'; token: string };
 
-    const { data } = await signUp({
+    await signUp({
       type,
       token,
       name,
       email,
+    }).then((res) => {
+      instance.defaults.headers.common[
+        'Authorization'
+      ] = `Bearer ${res.data.accessToken}`;
     });
 
     await router.push(`/?accessToken`);

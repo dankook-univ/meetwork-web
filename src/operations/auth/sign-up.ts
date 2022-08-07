@@ -1,30 +1,13 @@
 import { AxiosError, AxiosResponse } from 'axios';
 
-import { instance } from '@/config/axios';
+import { localInstance } from '@/config/axios';
 import { Token } from '@/domain/auth/token';
 
-export interface SignUpProps {
-  type: 'kakao';
-  token: string;
-  name: string;
-  email: string;
-}
+import { SignUpProps } from '@/pages/api/auth/new';
 
-export const signUp = ({ type, token, name, email }: SignUpProps) => {
-  const form = new FormData();
-
-  form.set('type', type);
-  form.set('token', token);
-  form.set('name', name);
-  form.set('email', email);
-
-  return instance.post<AxiosError, AxiosResponse<Token>, FormData>(
+export const signUp = (props: SignUpProps) => {
+  return localInstance.post<AxiosError, AxiosResponse<Token>, SignUpProps>(
     '/api/auth/new',
-    form,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    },
+    props,
   );
 };

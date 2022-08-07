@@ -1,21 +1,37 @@
-import React from 'react';
-import {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  NextPage,
-  Redirect,
-} from 'next';
-import axios, { AxiosError } from 'axios';
+import React, { useEffect } from 'react';
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
+import axios from 'axios';
 
 import { withoutAuthSSR } from '@/utils/session/withoutAuth';
-import { instance } from '@/config/axios';
 
 import { KakaoTokenResponse } from '@/domain/auth/kakao';
 import { login } from '@/operations/auth/login';
+import { useRouter } from 'next/router';
+import { instance } from '@/config/axios';
 
-interface KakaoProps {}
+interface KakaoProps {
+  token: string;
+}
 
-const Kakao: NextPage<KakaoProps> = () => {
+const Kakao: NextPage<KakaoProps> = ({ token }) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (token) {
+      login({ token, type: 'kakao' })
+        .then((res) => {
+          instance.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${res.data.accessToken}`;
+
+          router.replace('/');
+        })
+        .catch(() => {
+          router.replace(`/auth/new?token=${token}&type=kakao`);
+        });
+    }
+  }, [router, token]);
+
   return (
     <div className="flex flex-col min-w-screen min-h-screen p-[26px] items-center justify-center bg-gradient-to-b from-mint to-primary"></div>
   );
@@ -42,40 +58,9 @@ export const getServerSideProps: GetServerSideProps = withoutAuthSSR(
         return response.data.access_token;
       });
 
-    return await login({ token, type: 'kakao' })
-      .then(async (response) => {
-        context.req.session['token'] = {
-          accessToken: response.data.accessToken,
-          refreshToken: response.data.refreshToken,
-        };
-        await context.req.session.save();
-
-        instance.defaults.headers.common[
-          'Authorization'
-        ] = `Bearer ${response.data.accessToken}`;
-
-        return {
-          redirect: {
-            destination: `/`,
-          } as Redirect,
-        };
-      })
-      .catch((error: AxiosError) => {
-        if (error.response?.status === 401) {
-          return {
-            redirect: {
-              destination: `/auth/new?token=${token}&type=kakao`,
-              permanent: false,
-            } as Redirect,
-          };
-        }
-
-        return {
-          redirect: {
-            destination: '/auth',
-          } as Redirect,
-        };
-      });
+    return {
+      props: { token },
+    };
   },
 );
 
