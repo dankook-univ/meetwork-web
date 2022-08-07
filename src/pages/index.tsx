@@ -1,6 +1,8 @@
 import React from 'react';
 import { NextPage } from 'next';
 
+import { withAuthSSR } from '@/utils/session/withAuth';
+
 import HomeLayout from '@/components/layout/HomeLayout';
 
 interface IndexProps {}
@@ -14,5 +16,11 @@ const Index: NextPage<IndexProps> = ({}) => {
     </HomeLayout>
   );
 };
+
+export const getServerSideProps = withAuthSSR(async () => {
+  return {
+    props: {},
+  };
+});
 
 export default Index;

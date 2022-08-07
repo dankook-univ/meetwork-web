@@ -1,6 +1,8 @@
 import React from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 
+import { withoutAuthSSR } from '@/utils/session/withoutAuth';
+
 import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
 
 interface IndexProps {
@@ -21,12 +23,14 @@ const Index: NextPage<IndexProps> = ({ kakaoClientId }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    props: {
-      kakaoClientId: process.env.KAKAO_CLIENT_ID,
-    },
-  };
-};
+export const getServerSideProps: GetServerSideProps = withoutAuthSSR(
+  async () => {
+    return {
+      props: {
+        kakaoClientId: process.env.KAKAO_CLIENT_ID,
+      },
+    };
+  },
+);
 
 export default Index;

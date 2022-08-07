@@ -10,7 +10,7 @@ const NotificationIcon: React.FC = () => {
   );
 
   const handleOnClick = useCallback(() => {
-    router.push('/workspace/notification');
+    router.push('/notification');
   }, [router]);
 
   return (

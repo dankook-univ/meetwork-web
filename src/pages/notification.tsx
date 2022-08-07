@@ -1,5 +1,8 @@
 import React from 'react';
 import { NextPage } from 'next';
+
+import { withAuthSSR } from '@/utils/session/withAuth';
+
 import HomeLayout from '@/components/layout/HomeLayout';
 
 interface NotificationProps {}
@@ -13,5 +16,11 @@ const Notification: NextPage<NotificationProps> = ({}) => {
     </HomeLayout>
   );
 };
+
+export const getServerSideProps = withAuthSSR(async () => {
+  return {
+    props: {},
+  };
+});
 
 export default Notification;

@@ -10,7 +10,7 @@ const UserIcon: React.FC = () => {
   );
 
   const handleOnClick = useCallback(() => {
-    router.push('/workspace/me');
+    router.push('/me');
   }, [router]);
 
   return (

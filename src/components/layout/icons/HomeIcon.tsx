@@ -14,7 +14,7 @@ const HomeIcon: React.FC = () => {
   );
 
   const handleOnClick = useCallback(() => {
-    router.push('/workspace');
+    router.push('/');
   }, [router]);
 
   return (
