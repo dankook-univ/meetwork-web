@@ -35,7 +35,9 @@ export const fetcher = <
 };
 
 export const instance = axios.create({
-  baseURL: `https://${process.env.VERCEL_URL}`,
+  baseURL: process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000',
   headers: {
     'Content-Type': 'application/json',
   },

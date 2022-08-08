@@ -24,7 +24,9 @@ export const getServerSideProps: GetServerSideProps = withoutAuthSSR(
         `https://kauth.kakao.com/oauth/token?${new URLSearchParams({
           grant_type: 'authorization_code',
           client_id: process.env.KAKAO_CLIENT_ID as string,
-          redirect_uri: 'http://localhost:3000/auth/kakao',
+          redirect_uri: process.env.VERCEL_URL
+            ? `https://${process.env.VERCEL_URL}`
+            : 'http://localhost:3000/auth/kakao',
           code: (context.query as { code: string }).code as string,
         }).toString()}`,
         {},
