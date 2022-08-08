@@ -10,8 +10,14 @@ interface NotificationProps {}
 const Notification: NextPage<NotificationProps> = ({}) => {
   return (
     <HomeLayout header={{ title: '알림' }}>
-      <div className="flex items-center justify-center">
-        <span>Notification</span>
+      <div className="flex flex-1 flex-col">
+        <header className="flex px-[22px] py-[36px]">
+          <span className="font-[600] text-[20px] text-black">
+            초대받은 공간
+          </span>
+        </header>
+
+        <div className="flex flex-1"></div>
       </div>
     </HomeLayout>
   );

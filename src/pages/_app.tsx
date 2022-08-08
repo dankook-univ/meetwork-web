@@ -64,7 +64,7 @@ const App = ({ Component, pageProps, token }: AppProps & { token: Token }) => {
 
   return (
     <SWRConfig value={value}>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </SWRConfig>
   );
 };

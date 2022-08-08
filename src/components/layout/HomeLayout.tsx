@@ -15,8 +15,8 @@ interface HomeLayoutProps {
 
 const HomeLayout: React.FC<HomeLayoutProps> = ({ children, header }) => {
   return (
-    <div className="flex flex-col min-w-screen min-h-screen">
-      <header className="fix top-0 flex flex-row min-h-[136px] items-center justify-between pt-[40px] pb-[60px] bg-primary">
+    <div className="flex flex-col min-w-screen min-h-screen max-h-screen bg-primary">
+      <header className="sticky top-0 flex flex-row items-center justify-between pt-[40px] pb-[25px] bg-primary">
         <section>{header?.left}</section>
 
         <span className="font-[700] text-[22px] text-white">
@@ -26,11 +26,11 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children, header }) => {
         <section>{header?.right}</section>
       </header>
 
-      <div className="absolute w-screen h-[calc(100vh-170px)] top-[100px] overflow-scroll overflow-h-auto rounded-tl-[20px] rounded-tr-[20px] bg-white">
+      <div className="flex flex-1 w-screen overflow-y-auto scrollbar-hide rounded-tl-[20px] rounded-tr-[20px] bg-white">
         {children}
       </div>
 
-      <footer className="fixed bottom-0 flex flex-row w-screen h-[70px] px-[50px] border-t-[3px] border-gray items-center justify-between">
+      <footer className="flex flex-row w-screen min-h-[70px] px-[50px] border-t-[3px] border-gray items-center justify-between bg-white">
         <HomeIcon />
         <NotificationIcon />
         <UserIcon />

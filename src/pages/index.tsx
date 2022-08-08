@@ -10,8 +10,14 @@ interface IndexProps {}
 const Index: NextPage<IndexProps> = ({}) => {
   return (
     <HomeLayout header={{ title: 'HOME' }}>
-      <div className="flex items-center justify-center">
-        <span>Home</span>
+      <div className="flex flex-1 flex-col">
+        <header className="flex px-[22px] py-[36px]">
+          <span className="font-[600] text-[20px] text-black">
+            참가중인 공간
+          </span>
+        </header>
+
+        <div className="flex flex-1"></div>
       </div>
     </HomeLayout>
   );

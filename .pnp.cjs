@@ -47,6 +47,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:18.2.0"],\
             ["swr", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:1.3.0"],\
+            ["tailwind-scrollbar-hide", "npm:1.1.7"],\
             ["tailwindcss", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:3.1.8"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=f456af"]\
           ],\
@@ -2935,6 +2936,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:18.2.0"],\
             ["swr", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:1.3.0"],\
+            ["tailwind-scrollbar-hide", "npm:1.1.7"],\
             ["tailwindcss", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:3.1.8"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=f456af"]\
           ],\
@@ -4238,6 +4240,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [\
             "@types/react",\
             "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["tailwind-scrollbar-hide", [\
+        ["npm:1.1.7", {\
+          "packageLocation": "./.yarn/cache/tailwind-scrollbar-hide-npm-1.1.7-537baa5b75-2434a1db7a.zip/node_modules/tailwind-scrollbar-hide/",\
+          "packageDependencies": [\
+            ["tailwind-scrollbar-hide", "npm:1.1.7"]\
           ],\
           "linkType": "HARD"\
         }]\
