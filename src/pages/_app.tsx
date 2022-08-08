@@ -1,31 +1,21 @@
 import '../styles/globals.css';
 
-import React, { useEffect } from 'react';
-import type { AppContext, AppProps } from 'next/app';
+import React from 'react';
+import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { SWRConfig, SWRConfiguration } from 'swr';
 import { AxiosError } from 'axios';
 
-import { instance } from '@/config/axios';
-import { getSession } from '@/utils/session/withSession';
+import { fetcher } from '@/config/axios';
 
 import { reissue } from '@/operations/auth/reissue';
-import { Token } from '@/domain/auth/token';
 
-const App = ({ Component, pageProps, token }: AppProps & { token: Token }) => {
+const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
 
-  useEffect(() => {
-    if (!instance.defaults.headers.common.Authorization) {
-      instance.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${token?.accessToken}`;
-    }
-  }, [token]);
-
   const value: SWRConfiguration = {
-    fetcher: instance,
-    errorRetryCount: 3,
+    fetcher,
+    errorRetryCount: 2,
     onErrorRetry: async (
       err: AxiosError,
       key,
@@ -38,25 +28,14 @@ const App = ({ Component, pageProps, token }: AppProps & { token: Token }) => {
         .split('\n')[0]
         .split('status code ')[1];
 
-      if (statusCode !== 401 || retryCount > 3) return;
+      if (retryCount > 2) router?.replace('/auth');
 
-      if (!err.config.headers?.Authorization) {
-        instance.defaults.headers.common[
-          'Authorization'
-        ] = `Bearer ${token?.accessToken}`;
-      } else {
-        reissue()
-          .then((res) => {
-            instance.defaults.headers.common[
-              'Authorization'
-            ] = `Bearer ${res.data.accessToken}`;
-          })
-          .catch((error: AxiosError) => {
-            if (error.response?.status === 401) {
-              router.replace('/auth');
-            }
-          });
-      }
+      if (statusCode !== 401 || retryCount > 2) return;
+      reissue().catch((error: AxiosError) => {
+        if (error.response?.status === 401) {
+          router.replace('/auth');
+        }
+      });
 
       setTimeout(() => revalidate({ retryCount }), 1000);
     },
@@ -67,14 +46,6 @@ const App = ({ Component, pageProps, token }: AppProps & { token: Token }) => {
       <Component {...pageProps} />
     </SWRConfig>
   );
-};
-
-App.getInitialProps = async (context: AppContext) => {
-  const session = await getSession(context);
-
-  return {
-    token: session?.token,
-  };
 };
 
 export default App;

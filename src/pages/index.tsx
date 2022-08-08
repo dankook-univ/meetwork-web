@@ -5,9 +5,7 @@ import { withAuthSSR } from '@/utils/session/withAuth';
 
 import HomeLayout from '@/components/layout/HomeLayout';
 
-interface IndexProps {}
-
-const Index: NextPage<IndexProps> = ({}) => {
+const Index: NextPage = () => {
   return (
     <HomeLayout header={{ title: 'HOME' }}>
       <div className="flex flex-1 flex-col">
@@ -23,10 +21,6 @@ const Index: NextPage<IndexProps> = ({}) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withAuthSSR(async () => {
-  return {
-    props: {},
-  };
-});
+export const getServerSideProps: GetServerSideProps = withAuthSSR();
 
 export default Index;

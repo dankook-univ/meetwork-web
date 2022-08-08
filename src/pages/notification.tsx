@@ -5,9 +5,7 @@ import { withAuthSSR } from '@/utils/session/withAuth';
 
 import HomeLayout from '@/components/layout/HomeLayout';
 
-interface NotificationProps {}
-
-const Notification: NextPage<NotificationProps> = ({}) => {
+const Notification: NextPage = () => {
   return (
     <HomeLayout header={{ title: '알림' }}>
       <div className="flex flex-1 flex-col">
@@ -23,10 +21,6 @@ const Notification: NextPage<NotificationProps> = ({}) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withAuthSSR(async () => {
-  return {
-    props: {},
-  };
-});
+export const getServerSideProps: GetServerSideProps = withAuthSSR();
 
 export default Notification;

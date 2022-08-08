@@ -5,20 +5,17 @@ import Image from 'next/image';
 import useSWR from 'swr';
 
 import { withAuthSSR } from '@/utils/session/withAuth';
-import { me } from '@/operations/user/me';
-import { logout } from '@/operations/auth/logout';
+import { MeetworkApi } from '@/operations';
 
 import HomeLayout from '@/components/layout/HomeLayout';
 
-interface MeProps {}
-
-const Me: NextPage<MeProps> = () => {
+const Me: NextPage = () => {
   const router = useRouter();
 
-  const { data } = useSWR('/api/user/me', me);
+  const { data } = useSWR('/api/user/me.ts', MeetworkApi.user.me);
 
   const handleOnLogout = useCallback(async () => {
-    logout().then(() => {
+    MeetworkApi.auth.logout().finally(() => {
       router.replace('/auth');
     });
   }, [router]);
@@ -47,10 +44,6 @@ const Me: NextPage<MeProps> = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withAuthSSR(async () => {
-  return {
-    props: {},
-  };
-});
+export const getServerSideProps: GetServerSideProps = withAuthSSR();
 
 export default Me;

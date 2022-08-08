@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 
 import { withSessionRouter } from '@/utils/session/withSession';
-import { instance } from '@/config/axios';
+import { fetcher } from '@/config/axios';
 import { Token } from '@/domain/auth/token';
 
 export interface SignUpProps {
@@ -15,18 +15,15 @@ export interface SignUpProps {
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
-      const props: SignUpProps = await req.body;
-
-      return instance
-        .post<AxiosError, AxiosResponse<Token>, SignUpProps>(
-          '/api/auth/new',
-          props,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        )
+      return fetcher<Token, SignUpProps>({
+        req,
+        url: '/api/auth/new',
+        payload: await req.body,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        credential: false,
+      })
         .then(async (response) => {
           req.session.token = response.data;
           await req.session.save();
