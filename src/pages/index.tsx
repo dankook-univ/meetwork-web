@@ -1,5 +1,5 @@
 import React from 'react';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 
 import { withAuthSSR } from '@/utils/session/withAuth';
 
@@ -23,7 +23,7 @@ const Index: NextPage<IndexProps> = ({}) => {
   );
 };
 
-export const getServerSideProps = withAuthSSR(async () => {
+export const getServerSideProps: GetServerSideProps = withAuthSSR(async () => {
   return {
     props: {},
   };

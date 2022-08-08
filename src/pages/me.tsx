@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import useSWR from 'swr';
@@ -47,7 +47,7 @@ const Me: NextPage<MeProps> = () => {
   );
 };
 
-export const getServerSideProps = withAuthSSR(async () => {
+export const getServerSideProps: GetServerSideProps = withAuthSSR(async () => {
   return {
     props: {},
   };

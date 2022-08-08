@@ -5,7 +5,7 @@ import { Token } from '@/domain/auth/token';
 
 import { SignUpProps } from '@/pages/api/auth/new';
 
-export const signUp = (props: SignUpProps) => {
+export const signUp = (props: SignUpProps): Promise<AxiosResponse<Token>> => {
   return localInstance.post<AxiosError, AxiosResponse<Token>, SignUpProps>(
     '/api/auth/new',
     props,
