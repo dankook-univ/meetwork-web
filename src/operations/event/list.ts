@@ -1,11 +1,11 @@
 import { AxiosError, AxiosResponse } from 'axios';
 
 import { instance } from '@/config/axios';
-import { User } from '@/domain/user/user';
+import { Event } from '@/domain/event/event';
 
-export const me = (): Promise<User> => {
+export const list = (): Promise<Event[]> => {
   return instance
-    .get<AxiosError, AxiosResponse<User>>('/api/user/me')
+    .get<AxiosError, AxiosResponse<Event[]>>('/api/event/list')
     .then((res) => {
       return res.data;
     });
