@@ -20,7 +20,7 @@ export const fetcher = <
   return axios({
     method: req.method,
     url,
-    baseURL: 'http://localhost:8080',
+    baseURL: process.env.BASE_URL ?? 'http://localhost:8080',
     data: payload ?? {},
     headers: {
       'Content-Type': 'application/json',
