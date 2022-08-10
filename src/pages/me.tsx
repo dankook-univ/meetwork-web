@@ -22,14 +22,29 @@ const Me: NextPage = () => {
 
   return (
     <HomeLayout header={{ title: '사용자' }}>
-      <div className="flex flex-1 flex-col">
-        <div className="flex flex-1 flex-col items-center">
-          <span>{data?.name}</span>
-          <span>@{data?.id}</span>
-          <span>{data?.email}</span>
+      <div className="flex flex-1 flex-col pt-[54px] pb-[20px]">
+        <div className="flex flex-1 flex-col px-[18px]">
+          <div className="flex flex-col max-w-[calc(100vw-36px)] px-[16px] pt-[97px] pb-[13px] rounded-[10px] shadow-[0_0_4px_2px_rgba(0,0,0,0.1)]">
+            <span className="max-w-[calc(100vw-68px)] overflow-clip font-[400] text-[28px] text-black">
+              {data?.name}
+            </span>
+
+            <span className="max-w-[calc(100vw-68px)] overflow-clip font-[400] text-[16px] text-mint">
+              {data?.email}
+            </span>
+          </div>
         </div>
 
-        <div className="flex flex-col pb-[20px]">
+        <div className="flex flex-col">
+          <div className="flex flex-col px-[20px] py-[6px]">
+            <span className="font-[400] text-[16px] text-lightGray">
+              회원아이디
+            </span>
+            <span className="font-[400] text-[16px] text-lightGray">
+              @{data?.id}
+            </span>
+          </div>
+
           <div
             className="flex flex-row px-[18px] py-[20px] border-y-[1px] border-lightGray items-center justify-between"
             onClick={handleOnLogout}
