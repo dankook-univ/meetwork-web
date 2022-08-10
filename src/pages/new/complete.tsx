@@ -48,6 +48,7 @@ const Complete: NextPage = () => {
 
         <CustomButton
           style="rounded-[5px] bg-mint"
+          textStyle="text-white"
           label="확인"
           onClick={handleNext}
         />

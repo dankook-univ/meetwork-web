@@ -53,7 +53,7 @@ const CreateEventModal: React.FC = () => {
 
           <CustomButton
             style="w-full rounded-[5px] bg-mint mb-[8px]"
-            textStyle="font-[400]"
+            textStyle="font-[400] text-white"
             label="공간 만들기"
             onClick={handleCreateEvent}
           />

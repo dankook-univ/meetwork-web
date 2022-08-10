@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['AppleSDGothicNeo', ...defaultTheme.fontFamily.sans],
+        sans: ['NanumBarunGothic', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         primary: '#C2A1D8',

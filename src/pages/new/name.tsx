@@ -61,6 +61,7 @@ const Name: NextPage = () => {
 
         <CustomButton
           style="rounded-[5px] bg-mint"
+          textStyle="text-white"
           label="다음"
           disable={buttonDisabled}
           onClick={handleNext}

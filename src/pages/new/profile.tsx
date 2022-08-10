@@ -121,6 +121,7 @@ const Profile: NextPage = () => {
 
         <CustomButton
           style="w-[130px] h-[42px] rounded-[14px] mt-[74px] bg-mint"
+          textStyle="text-white"
           label="참가하기"
           disable={buttonDisabled}
           onClick={handleOnNext}

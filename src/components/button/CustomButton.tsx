@@ -26,9 +26,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       className={`flex p-[10px] border border-white rounded-[50px] items-center justify-center ${style}`}
       onClick={handleOnClick}
     >
-      <span className={`font-[600] text-[16px] text-white ${textStyle}`}>
-        {label}
-      </span>
+      <span className={`font-[600] text-[16px] ${textStyle}`}>{label}</span>
     </div>
   );
 };

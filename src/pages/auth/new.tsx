@@ -63,6 +63,7 @@ const New: NextPage = () => {
 
         <CustomButton
           style="w-full"
+          textStyle="text-white"
           label="계속"
           onClick={handleOnClick}
           disable={buttonStatus}
