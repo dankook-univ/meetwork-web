@@ -4,6 +4,7 @@ import React from 'react';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { SWRConfig, SWRConfiguration } from 'swr';
+import { RecoilRoot } from 'recoil';
 import { AxiosError } from 'axios';
 
 import { fetcher } from '@/config/axios';
@@ -42,9 +43,11 @@ const App = ({ Component, pageProps }: AppProps) => {
   };
 
   return (
-    <SWRConfig value={value}>
-      <Component {...pageProps} />
-    </SWRConfig>
+    <RecoilRoot>
+      <SWRConfig value={value}>
+        <Component {...pageProps} />
+      </SWRConfig>
+    </RecoilRoot>
   );
 };
 

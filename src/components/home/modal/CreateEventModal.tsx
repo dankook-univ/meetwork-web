@@ -36,7 +36,7 @@ const CreateEventModal: React.FC = () => {
   );
 
   const handleCreateEvent = useCallback(async () => {
-    await router.push('/new/profile', '/new');
+    await router.push('/new/profile');
   }, [router]);
 
   return (

@@ -3,7 +3,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withoutAuthSSR } from '@/utils/session/withoutAuth';
 
-import CustomInput from '@/components/form/CustomInput';
+import AccountInfoInput from '@/components/auth/AccountInfoInput';
 import CustomButton from '@/components/button/CustomButton';
 import { MeetworkApi } from '@/operations';
 
@@ -43,7 +43,7 @@ const New: NextPage = () => {
         </span>
 
         <div className="flex flex-col w-full mt-[90px] mb-[100px]">
-          <CustomInput<string>
+          <AccountInfoInput<string>
             value={name}
             setValue={setName}
             error={nameError}
@@ -51,7 +51,7 @@ const New: NextPage = () => {
             icon={{ src: '/icons/user.svg', width: 24, height: 24 }}
             placeholder="사용자 이름"
           />
-          <CustomInput<string>
+          <AccountInfoInput<string>
             value={email}
             setValue={setEmail}
             error={emailError}

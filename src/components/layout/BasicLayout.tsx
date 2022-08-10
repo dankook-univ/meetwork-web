@@ -32,7 +32,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({
           {header?.left}
         </section>
 
-        <section className="flex flex-1 items-center justify-center">
+        <section className="flex flex-5 items-center justify-center">
           <span
             className={`font-[700] text-[22px] text-${
               header?.textColor ?? 'white'
