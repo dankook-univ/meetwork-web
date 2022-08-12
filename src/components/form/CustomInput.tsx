@@ -1,59 +1,45 @@
-import React, { useCallback, useMemo } from 'react';
-import Image, { ImageProps } from 'next/image';
-
+import React, { useCallback } from 'react';
 import Conditional from '@/hocs/Conditional';
 
-interface CustomInputProps<T> {
-  value: T;
-  setValue: React.Dispatch<React.SetStateAction<T>>;
-  error?: boolean;
-  style?: React.HTMLAttributes<JSX.IntrinsicElements['div']>['className'];
-  icon?: ImageProps;
-  placeholder?: string;
+interface CustomInputProps {
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
+  align?: 'left' | 'center';
 }
 
-const CustomInput = <T extends string>({
+const CustomInput: React.FC<CustomInputProps> = ({
   value,
   setValue,
-  error = false,
-  style,
-  icon,
-  placeholder,
-}: CustomInputProps<T>) => {
-  const errorStyle = useMemo<
-    React.HTMLAttributes<JSX.IntrinsicElements['div']>['className']
-  >(
-    () =>
-      error && value.length !== 0
-        ? `border-[1px] border-rose-500`
-        : `border-[1px] border-transparent`,
-    [value, error],
-  );
-
+  align = 'left',
+}) => {
   const handleOnChange = useCallback(
-    (e: React.FormEvent<HTMLInputElement>) => {
-      setValue(e.currentTarget?.value as T);
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      event.preventDefault();
+      setValue(event.target.value);
     },
     [setValue],
   );
 
   return (
-    <div
-      className={`flex w-full px-[22px] py-[14px] rounded-[50px] items-center bg-white/40 ${errorStyle} ${style}`}
-    >
-      <Conditional condition={!!icon}>
-        <div className="flex mr-[14px]">
-          <Image {...icon!} alt="" />
-        </div>
+    <>
+      <Conditional condition={align === 'left'}>
+        <input
+          className={`flex w-full h-[44px] border-b-[1px] border-b-lightGray focus:outline-none caret-primary bg-white font-[400] text-[20px] text-black`}
+          type="text"
+          value={value}
+          onChange={handleOnChange}
+        />
       </Conditional>
 
-      <input
-        className="bg-transparent focus:outline-none caret-mint font-normal text-[14px] text-white placeholder:font-normal placeholder:font-[14px] placeholder:text-white"
-        value={value}
-        onChange={handleOnChange}
-        placeholder={placeholder}
-      />
-    </div>
+      <Conditional condition={align === 'center'}>
+        <input
+          className={`flex w-full h-[44px] border-b-[1px] border-b-lightGray focus:outline-none caret-primary bg-white font-[400] text-[20px] text-black text-center`}
+          type="text"
+          value={value}
+          onChange={handleOnChange}
+        />
+      </Conditional>
+    </>
   );
 };
 

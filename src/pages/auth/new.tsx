@@ -1,13 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-
-import { signUp } from '@/operations/auth/sign-up';
 import { withoutAuthSSR } from '@/utils/session/withoutAuth';
-import { instance } from '@/config/axios';
 
-import CustomInput from '@/components/form/CustomInput';
+import AccountInfoInput from '@/components/auth/AccountInfoInput';
 import CustomButton from '@/components/button/CustomButton';
+import { MeetworkApi } from '@/operations';
 
 const emailReg = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
@@ -27,18 +25,14 @@ const New: NextPage = () => {
   const handleOnClick = useCallback(async () => {
     const { type, token } = router.query as { type: 'kakao'; token: string };
 
-    await signUp({
+    await MeetworkApi.auth.signUp({
       type,
       token,
       name,
       email,
-    }).then((res) => {
-      instance.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${res.data.accessToken}`;
     });
 
-    await router.push(`/?accessToken`);
+    await router.push(`/`);
   }, [router, name, email]);
 
   return (
@@ -49,7 +43,7 @@ const New: NextPage = () => {
         </span>
 
         <div className="flex flex-col w-full mt-[90px] mb-[100px]">
-          <CustomInput<string>
+          <AccountInfoInput<string>
             value={name}
             setValue={setName}
             error={nameError}
@@ -57,7 +51,7 @@ const New: NextPage = () => {
             icon={{ src: '/icons/user.svg', width: 24, height: 24 }}
             placeholder="사용자 이름"
           />
-          <CustomInput<string>
+          <AccountInfoInput<string>
             value={email}
             setValue={setEmail}
             error={emailError}
@@ -69,6 +63,7 @@ const New: NextPage = () => {
 
         <CustomButton
           style="w-full"
+          textStyle="text-white"
           label="계속"
           onClick={handleOnClick}
           disable={buttonStatus}

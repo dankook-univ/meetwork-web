@@ -2,33 +2,27 @@
 @tailwind components;
 
 @font-face {
-    font-family: 'AppleSDGothicNeo';
+    font-family: 'NanumBarunGothic';
+    font-weight: 200;
+    src: url("../../public/fonts/NanumBarunGothicUltraLight.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'NanumBarunGothic';
     font-weight: 300;
-    src: url("../../public/fonts/AppleSDGothicNeoL.ttf") format("truetype");
+    src: url("../../public/fonts/NanumBarunGothicLight.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'AppleSDGothicNeo';
-    font-weight: 500;
-    src: url("../../public/fonts/AppleSDGothicNeoM.ttf") format("truetype");
+    font-family: 'NanumBarunGothic';
+    font-weight: 400;
+    src: url("../../public/fonts/NanumBarunGothic.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'AppleSDGothicNeo';
-    font-weight: 700;
-    src: url("../../public/fonts/AppleSDGothicNeoB.ttf") format("truetype");
-}
-
-@font-face {
-    font-family: 'AppleSDGothicNeo';
-    font-weight: 800;
-    src: url("../../public/fonts/AppleSDGothicNeoEB.ttf") format("truetype");
-}
-
-@font-face {
-    font-family: 'AppleSDGothicNeo';
-    font-weight: 900;
-    src: url("../../public/fonts/AppleSDGothicNeoH.ttf") format("truetype");
+    font-family: 'NanumBarunGothic';
+    font-weight: 600;
+    src: url("../../public/fonts/NanumBarunGothicBold.ttf") format("truetype");
 }
 
 @tailwind utilities;

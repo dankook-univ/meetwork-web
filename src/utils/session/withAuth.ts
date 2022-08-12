@@ -19,5 +19,10 @@ export const withAuth = (getServerSideProps: GetServerSideProps) => {
   };
 };
 
-export const withAuthSSR = (handler: GetServerSideProps) =>
-  withSessionSSR(withAuth(handler));
+export const withAuthSSR = (
+  handler: GetServerSideProps = async () => {
+    return {
+      props: {},
+    };
+  },
+) => withSessionSSR(withAuth(handler));

@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 
 interface CustomButtonProps {
   style?: React.HTMLAttributes<JSX.IntrinsicElements['div']>['className'];
+  textStyle?: React.HTMLAttributes<JSX.IntrinsicElements['span']>['className'];
   label: string;
   onClick?: () => void;
   disable?: boolean;
@@ -9,6 +10,7 @@ interface CustomButtonProps {
 
 const CustomButton: React.FC<CustomButtonProps> = ({
   style,
+  textStyle,
   label,
   onClick,
   disable = false,
@@ -24,7 +26,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       className={`flex p-[10px] border border-white rounded-[50px] items-center justify-center ${style}`}
       onClick={handleOnClick}
     >
-      <span className="font-bold text-[16px] text-white">{label}</span>
+      <span className={`font-[600] text-[16px] ${textStyle}`}>{label}</span>
     </div>
   );
 };

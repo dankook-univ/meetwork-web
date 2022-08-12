@@ -1,7 +1,6 @@
-export interface User {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
+import { Core } from '@/domain/core';
+
+export interface User extends Core {
   name: string;
   email: string;
 }

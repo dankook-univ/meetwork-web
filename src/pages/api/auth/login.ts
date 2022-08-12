@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 
 import { withSessionRouter } from '@/utils/session/withSession';
-import { instance } from '@/config/axios';
+import { fetcher } from '@/config/axios';
 import { Token } from '@/domain/auth/token';
 
 export interface LoginProps {
@@ -13,13 +13,12 @@ export interface LoginProps {
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
-      const { token, type }: LoginProps = await req.body;
-
-      return instance
-        .post<AxiosError, AxiosResponse<Token>>('/api/auth/login', {
-          token,
-          type,
-        })
+      return fetcher<Token, LoginProps>({
+        req,
+        url: '/api/auth/login',
+        payload: await req.body,
+        credential: false,
+      })
         .then(async (response) => {
           req.session.token = response.data;
           await req.session.save();

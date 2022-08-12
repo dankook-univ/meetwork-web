@@ -12,7 +12,9 @@ const KakaoLoginButton: React.FC<KakaoLoginButtonProps> = ({
     () =>
       `https://kauth.kakao.com/oauth/authorize?${new URLSearchParams({
         client_id: kakaoClientId,
-        redirect_uri: 'http://localhost:3000/auth/kakao',
+        redirect_uri: process.env.NEXT_PUBLIC_VERCEL_URL
+          ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+          : 'http://localhost:3000/auth/kakao',
         response_type: 'code',
       }).toString()}`,
     [kakaoClientId],
