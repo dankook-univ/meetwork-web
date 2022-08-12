@@ -32,7 +32,7 @@ const Index: NextPage = () => {
       }}
     >
       <div className="flex flex-1 flex-col">
-        <header className="flex px-[22px] py-[36px]">
+        <header className="flex px-[22px] pt-[36px]">
           <span className="font-[600] text-[20px] text-black">
             참가중인 공간
           </span>
