@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
@@ -6,19 +6,35 @@ import { useRecoilState } from 'recoil';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { withAuthSSR } from '@/utils/session/withAuth';
 import { createEventState } from '@/stores/event/create-event';
+import { MeetworkApi } from '@/operations';
 
 import HeaderBackButton from '@/components/button/HeaderBackButton';
 import CustomInput from '@/components/form/CustomInput';
 import CustomButton from '@/components/button/CustomButton';
+import Conditional from '@/hocs/Conditional';
 
 const Code: NextPage = () => {
   const router = useRouter();
 
   const [createEvent, setCreateEventState] = useRecoilState(createEventState);
 
-  const [code, setCode] = useState<string>(createEvent.code);
+  const [code, setCode] = useState<string>(createEvent.code ?? '');
 
-  const buttonDisabled = useMemo<boolean>(() => code.length === 0, [code]);
+  const [codeAvailable, setCodeAvailable] = useState<boolean | null>(null);
+
+  const buttonDisabled = useMemo<boolean>(
+    () => codeAvailable !== true,
+    [codeAvailable],
+  );
+
+  useEffect(() => {
+    if (code) {
+      setCodeAvailable(null);
+      MeetworkApi.event.checkCode(code).then((res) => {
+        setCodeAvailable(!res);
+      });
+    }
+  }, [code]);
 
   const handleBack = useCallback(() => {
     router.back();
@@ -30,13 +46,19 @@ const Code: NextPage = () => {
   );
 
   const handleNext = useCallback(async () => {
-    setCreateEventState((prev) => ({
-      ...prev,
-      code,
-    }));
+    MeetworkApi.event.create({ ...createEvent, code }).then(async () => {
+      setCreateEventState({
+        name: '',
+        code: '',
+        meetingUrl: null,
+        organizerNickname: '',
+        organizerBio: '',
+        organizerProfileImage: null,
+      });
 
-    await router.push('/new/complete');
-  }, [setCreateEventState, router, code]);
+      await router.push('/new/complete');
+    });
+  }, [code, setCreateEventState, createEvent, router]);
 
   return (
     <BasicLayout
@@ -58,10 +80,14 @@ const Code: NextPage = () => {
 
           <CustomInput value={code} setValue={setCode} />
 
-          <span className="font-[400] text-[14px] text-black mt-[8px]">
-            초대코드를 통해 참가할 경우 참가자로 배정되어요!
-          </span>
-          <span className="font-[400] text-[14px] text-black">{`역할은 추후 '행사>관리>역할'에서 수정해주세요.`}</span>
+          <Conditional condition={code.length === 0 || codeAvailable !== false}>
+            <>
+              <span className="font-[400] text-[14px] text-black mt-[8px]">
+                초대코드를 통해 참가할 경우 참가자로 배정되어요!
+              </span>
+              <span className="font-[400] text-[14px] text-black">{`역할은 추후 '행사>관리>역할'에서 수정해주세요.`}</span>
+            </>
+          </Conditional>
         </div>
 
         <CustomButton

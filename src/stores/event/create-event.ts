@@ -6,11 +6,6 @@ export const createEventState = atom<CreateEventProps>({
   default: {
     name: '',
     code: '',
-    meetingUrl: null,
-    organizer: {
-      profileImage: null,
-      nickname: '',
-      bio: '',
-    },
+    organizerNickname: '',
   },
 });

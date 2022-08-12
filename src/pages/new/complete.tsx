@@ -1,32 +1,17 @@
 import React, { useCallback } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useSetRecoilState } from 'recoil';
 
 import { withAuthSSR } from '@/utils/session/withAuth';
-import { createEventState } from '@/stores/event/create-event';
 import CustomButton from '@/components/button/CustomButton';
 import BasicLayout from '@/components/layout/BasicLayout';
 
 const Complete: NextPage = () => {
   const router = useRouter();
 
-  const setCreateEventStatus = useSetRecoilState(createEventState);
-
   const handleNext = useCallback(async () => {
-    setCreateEventStatus({
-      name: '',
-      code: '',
-      meetingUrl: null,
-      organizer: {
-        profileImage: null,
-        nickname: '',
-        bio: '',
-      },
-    });
-
     await router.push('/');
-  }, [setCreateEventStatus, router]);
+  }, [router]);
 
   return (
     <BasicLayout

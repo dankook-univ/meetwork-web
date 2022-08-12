@@ -23,7 +23,6 @@ export const fetcher = <
     baseURL: process.env.BASE_URL ?? 'http://localhost:8080',
     data: payload ?? {},
     headers: {
-      'Content-Type': 'application/json',
       ...(credential
         ? {
             Authorization: `Bearer ${req.session.token?.accessToken}`,

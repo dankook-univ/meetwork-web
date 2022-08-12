@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
+import Conditional from '@/hocs/Conditional';
 
 interface CustomInputProps {
   value: string;
@@ -11,8 +12,6 @@ const CustomInput: React.FC<CustomInputProps> = ({
   setValue,
   align = 'left',
 }) => {
-  const textAlign = useMemo(() => `text-${align}`, [align]);
-
   const handleOnChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
@@ -22,12 +21,25 @@ const CustomInput: React.FC<CustomInputProps> = ({
   );
 
   return (
-    <input
-      className={`flex w-full h-[44px] border-b-[1px] border-b-lightGray focus:outline-none caret-primary bg-white font-[400] text-[20px] text-black ${textAlign}`}
-      type="text"
-      value={value}
-      onChange={handleOnChange}
-    />
+    <>
+      <Conditional condition={align === 'left'}>
+        <input
+          className={`flex w-full h-[44px] border-b-[1px] border-b-lightGray focus:outline-none caret-primary bg-white font-[400] text-[20px] text-black`}
+          type="text"
+          value={value}
+          onChange={handleOnChange}
+        />
+      </Conditional>
+
+      <Conditional condition={align === 'center'}>
+        <input
+          className={`flex w-full h-[44px] border-b-[1px] border-b-lightGray focus:outline-none caret-primary bg-white font-[400] text-[20px] text-black text-center`}
+          type="text"
+          value={value}
+          onChange={handleOnChange}
+        />
+      </Conditional>
+    </>
   );
 };
 

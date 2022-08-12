@@ -19,12 +19,12 @@ const Profile: NextPage = () => {
   const [createEvent, setCreateEventState] = useRecoilState(createEventState);
 
   const [image, setImage] = useState<Blob | null>(
-    createEvent.organizer?.profileImage as Blob,
+    createEvent?.organizerProfileImage as Blob,
   );
   const [nickname, setNickname] = useState<string>(
-    createEvent.organizer.nickname,
+    createEvent?.organizerNickname ?? '',
   );
-  const [bio, setBio] = useState<string>(createEvent.organizer?.bio ?? '');
+  const [bio, setBio] = useState<string>(createEvent?.organizerBio ?? '');
   const [imagePath, setImagePath] = useState<string | null>(null);
 
   const buttonDisabled = useMemo<boolean>(
@@ -63,11 +63,9 @@ const Profile: NextPage = () => {
   const handleOnNext = useCallback(async () => {
     setCreateEventState((prev) => ({
       ...prev,
-      organizer: {
-        profileImage: image as File,
-        nickname,
-        bio,
-      },
+      organizerProfileImage: image as File,
+      organizerNickname: nickname,
+      organizerBio: bio,
     }));
 
     await router.push('/new/name');
@@ -82,45 +80,47 @@ const Profile: NextPage = () => {
         textColor: 'black',
       }}
     >
-      <div className="flex flex-1 flex-col px-[30px] pb-[100px] items-center justify-center">
-        <label htmlFor="profile-image">
-          <Conditional condition={imagePath === null}>
-            <div className="flex w-[132px] h-[132px] rounded-[100%] shadow-[0_0_4px_rgba(0,0,0,0.1)] items-center justify-center bg-primary">
-              <Image src="/icons/camera.svg" width={24} height={24} alt="" />
-            </div>
-          </Conditional>
+      <div className="flex flex-1 flex-col px-[22px] py-[50px] justify-between">
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <label htmlFor="profile-image">
+            <Conditional condition={imagePath === null}>
+              <div className="flex w-[132px] h-[132px] rounded-[100%] shadow-[0_0_4px_rgba(0,0,0,0.1)] items-center justify-center bg-primary">
+                <Image src="/icons/camera.svg" width={24} height={24} alt="" />
+              </div>
+            </Conditional>
 
-          <Conditional condition={imagePath !== null}>
-            <Image
-              className="flex rounded-[100%] object-cover"
-              src={imagePath as string}
-              width={132}
-              height={132}
-              alt=""
-            />
-          </Conditional>
-        </label>
+            <Conditional condition={imagePath !== null}>
+              <Image
+                className="flex rounded-[100%] object-cover"
+                src={imagePath as string}
+                width={132}
+                height={132}
+                alt=""
+              />
+            </Conditional>
+          </label>
 
-        <input
-          id="profile-image"
-          className="hidden"
-          type="file"
-          accept="image/jpg,image/jpeg,impge/png,image/gif"
-          onChange={handleImage}
-        />
+          <input
+            id="profile-image"
+            className="hidden"
+            type="file"
+            accept="image/jpg,image/jpeg,impge/png,image/gif"
+            onChange={handleImage}
+          />
 
-        <span className="font-[400] text-[20px] text-lightGray mt-[30px]">
-          닉네임
-        </span>
-        <CustomInput value={nickname} setValue={setNickname} align="center" />
+          <span className="font-[400] text-[20px] text-lightGray mt-[30px]">
+            닉네임
+          </span>
+          <CustomInput value={nickname} setValue={setNickname} align="center" />
 
-        <span className="font-[400] text-[20px] text-lightGray mt-[16px]">
-          상태메시지
-        </span>
-        <CustomInput value={bio} setValue={setBio} align="center" />
+          <span className="font-[400] text-[20px] text-lightGray mt-[16px]">
+            상태메시지
+          </span>
+          <CustomInput value={bio} setValue={setBio} align="center" />
+        </div>
 
         <CustomButton
-          style="w-[130px] h-[42px] rounded-[14px] mt-[74px] bg-mint"
+          style="rounded-[5px] mt-[74px] bg-mint"
           textStyle="text-white"
           label="참가하기"
           disable={buttonDisabled}
