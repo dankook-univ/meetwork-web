@@ -34,9 +34,10 @@ export const fetcher = <
 };
 
 export const instance = axios.create({
-  baseURL: process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000',
+  baseURL:
+    process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL
+      ? 'https://meetwork-web.vercel.app'
+      : 'http://localhost:3000',
   headers: {
     'Content-Type': 'application/json',
   },

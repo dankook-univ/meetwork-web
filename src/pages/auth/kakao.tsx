@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = withoutAuthSSR(
           grant_type: 'authorization_code',
           client_id: process.env.KAKAO_CLIENT_ID as string,
           redirect_uri: process.env.VERCEL_URL
-            ? `https://${process.env.VERCEL_URL}`
+            ? 'https://meetwork-web.vercel.app/auth/kakao'
             : 'http://localhost:3000/auth/kakao',
           code: (context.query as { code: string }).code as string,
         }).toString()}`,
