@@ -18,7 +18,7 @@ export const create = ({
   form.append('organizerNickname', organizerNickname);
   if (organizerBio !== undefined)
     form.append('organizerBio', organizerBio as string);
-  if (organizerProfileImage !== undefined)
+  if (organizerProfileImage)
     form.append('organizerProfileImage', organizerProfileImage as Blob);
 
   return instance
