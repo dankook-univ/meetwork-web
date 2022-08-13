@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import classNames from 'classnames';
 
 interface CustomButtonProps {
   style?: React.HTMLAttributes<JSX.IntrinsicElements['div']>['className'];
@@ -23,7 +24,10 @@ const CustomButton: React.FC<CustomButtonProps> = ({
 
   return (
     <div
-      className={`flex p-[10px] border border-white rounded-[50px] items-center justify-center ${style}`}
+      className={classNames(
+        `flex p-[10px] border border-white items-center justify-center`,
+        style,
+      )}
       onClick={handleOnClick}
     >
       <span className={`font-[600] text-[16px] ${textStyle}`}>{label}</span>
