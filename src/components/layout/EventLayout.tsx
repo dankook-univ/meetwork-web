@@ -31,7 +31,7 @@ const EventLayout: React.FC<EventLayoutProps> = ({
     <BasicLayout
       header={{
         color: 'pink',
-        style: 'min-h-[136px] pt-[78px]',
+        style: 'h-[136px] pt-[78px]',
         ...header,
       }}
       container={container}

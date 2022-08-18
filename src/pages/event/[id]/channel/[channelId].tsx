@@ -27,22 +27,25 @@ interface ChannelProps {
 }
 
 const Channel: NextPage<ChannelProps> = ({
-  token,
-  baseUrl,
-  eventId,
-  channelId,
-}) => {
+                                           token,
+                                           baseUrl,
+                                           eventId,
+                                           channelId,
+                                         }) => {
   const router = useRouter();
   const client = useRef<Client>();
   const messageRef = useRef<HTMLDivElement>(null);
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
-  const { data: me } = useSWR(`/api/user/me`, MeetworkApi.user.me);
-  const { data: room } = useSWR([`/api/chat/${eventId}/${channelId}`], () =>
+  const {data: event} = useSWR(`/api/event/${eventId}`, () =>
+    MeetworkApi.event.get(eventId),
+  );
+  const {data: me} = useSWR(`/api/user/me`, MeetworkApi.user.me);
+  const {data: room} = useSWR([`/api/chat/${eventId}/${channelId}`], () =>
     MeetworkApi.chat.getChatRoom(eventId, channelId),
   );
-  const { data: messageList } = useSWR(
+  const {data: messageList} = useSWR(
     `/api/chat/${eventId}/${channelId}/messages`,
     () => MeetworkApi.chat.getMessages(eventId, channelId),
   );
@@ -84,7 +87,7 @@ const Channel: NextPage<ChannelProps> = ({
   }, [connect]);
 
   useEffect(() => {
-    messageRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messageRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages.length]);
 
   const handleBack = useCallback(() => {
@@ -92,7 +95,7 @@ const Channel: NextPage<ChannelProps> = ({
   }, [router]);
 
   const headerLeft = useMemo(
-    () => <HeaderBackButton color="white" onClick={handleBack} />,
+    () => <HeaderBackButton color="white" onClick={handleBack}/>,
     [handleBack],
   );
 
@@ -100,6 +103,7 @@ const Channel: NextPage<ChannelProps> = ({
     <EventLayout
       header={{
         title: room ? `${room?.name} ${room?.participants.length}명` : '',
+        subTitle: event?.name ?? '',
         left: headerLeft,
       }}
       footerShown={false}
@@ -107,12 +111,12 @@ const Channel: NextPage<ChannelProps> = ({
       <div className="flex flex-1 flex-col">
         <div className="flex flex-1 flex-col-reverse">
           {messages.map((message) => (
-            <MessageItem key={message.id} message={message} />
+            <MessageItem key={message.id} message={message}/>
           ))}
         </div>
 
-        <div className="bottom-[-74px] h-0" ref={messageRef} />
-        <InputMessage eventId={eventId} channelId={channelId} />
+        <div className="bottom-[-74px] h-0" ref={messageRef}/>
+        <InputMessage eventId={eventId} channelId={channelId}/>
       </div>
     </EventLayout>
   );
@@ -120,7 +124,7 @@ const Channel: NextPage<ChannelProps> = ({
 
 export const getServerSideProps: GetServerSideProps = withAuthSSR(
   async (context: GetServerSidePropsContext) => {
-    const { id, channelId } = await context.query;
+    const {id, channelId} = await context.query;
 
     return {
       props: {

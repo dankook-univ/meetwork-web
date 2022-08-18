@@ -6,6 +6,7 @@ export interface BasicLayoutProps {
   children: JSX.Element;
   header?: {
     title?: string;
+    subTitle?: string;
     titleAlign?: 'left' | 'center';
     left?: JSX.Element;
     right?: JSX.Element;
@@ -40,7 +41,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({
           </section>
         </Conditional>
 
-        <section className="flex flex-5 items-center justify-center">
+        <section className="flex flex-col flex-5 items-center justify-center">
           <span
             className={classNames(
               `font-[700] text-[22px]`,
@@ -48,6 +49,15 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({
             )}
           >
             {header?.title}
+          </span>
+
+          <span
+            className={classNames(
+              `font-[400] text-[14px]`,
+              `text-${header?.textColor ?? 'white'}`,
+            )}
+          >
+            {header?.subTitle}
           </span>
         </section>
 
