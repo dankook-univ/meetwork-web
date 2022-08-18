@@ -9,4 +9,5 @@ export interface Profile extends Core {
     id: string;
     url: string;
   };
+  isAdmin: boolean;
 }

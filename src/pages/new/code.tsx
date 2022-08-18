@@ -29,12 +29,13 @@ const Code: NextPage = () => {
 
   useEffect(() => {
     if (code) {
+      setCreateEventState((prev) => ({ ...prev, code }));
       setCodeAvailable(null);
       MeetworkApi.event.checkCode(code).then((res) => {
         setCodeAvailable(!res);
       });
     }
-  }, [code]);
+  }, [code, setCreateEventState]);
 
   const handleBack = useCallback(() => {
     router.back();
@@ -78,7 +79,7 @@ const Code: NextPage = () => {
             초대코드를 만들어주세요.
           </span>
 
-          <CustomInput value={code} setValue={setCode} />
+          <CustomInput value={code} setValue={setCode} avoidSpace={true} />
 
           <Conditional condition={code.length === 0 || codeAvailable !== false}>
             <>

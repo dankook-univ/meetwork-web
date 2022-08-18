@@ -46,7 +46,12 @@ const Profile: NextPage = () => {
 
   const handleOnBack = useCallback(async () => {
     router.back();
-  }, [router]);
+    setCreateEventState({
+      name: '',
+      code: '',
+      organizerNickname: '',
+    });
+  }, [router, setCreateEventState]);
 
   const headerLeft = useMemo(
     () => <HeaderBackButton color="black" onClick={handleOnBack} />,

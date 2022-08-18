@@ -7,6 +7,7 @@ interface CustomInputProps {
   placeholder?: string;
   align?: 'left' | 'center';
   textStyle?: React.HTMLAttributes<JSX.IntrinsicElements['input']>['className'];
+  avoidSpace?: boolean;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -15,13 +16,18 @@ const CustomInput: React.FC<CustomInputProps> = ({
   placeholder = '',
   align = 'left',
   textStyle = '',
+  avoidSpace = false,
 }) => {
   const handleOnChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
-      setValue(event.target.value);
+      setValue(
+        avoidSpace
+          ? event.target.value.trimStart().replace(' ', '-')
+          : event.target.value.trimStart(),
+      );
     },
-    [setValue],
+    [avoidSpace, setValue],
   );
 
   return (

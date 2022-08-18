@@ -8,6 +8,7 @@ import { withAuthSSR } from '@/utils/session/withAuth';
 import { MeetworkApi } from '@/operations';
 import EventLayout from '@/components/layout/EventLayout';
 import ChannelItem from '@/components/event/ChannelItem';
+import BoardItem from '@/components/event/BoardItem';
 
 interface EventProps {
   eventId: string;
@@ -18,6 +19,9 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
 
   const { data: event } = useSWR(['/api/event', eventId], () =>
     MeetworkApi.event.get(eventId),
+  );
+  const { data: boards } = useSWR(['/api/board', eventId], () =>
+    MeetworkApi.board.list(eventId),
   );
   const { data: rooms } = useSWR(['/api/chat', eventId], () =>
     MeetworkApi.chat.getParticipantChatRooms(eventId),
@@ -52,6 +56,10 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
           <header className="flex flex-row p-[16px] border-t-[1px] border-t-gray">
             <span className="font-[600] text-[16px] text-black">게시판</span>
           </header>
+
+          {boards?.map((board) => (
+            <BoardItem key={board.id} board={board} />
+          ))}
         </section>
 
         <section className="flex flex-col">

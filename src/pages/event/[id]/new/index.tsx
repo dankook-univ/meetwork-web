@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ReactSwitch from 'react-switch';
 import classNames from 'classnames';
+import useSWR from 'swr';
 
 import { withAuthSSR } from '@/utils/session/withAuth';
 import { MeetworkApi } from '@/operations';
@@ -16,29 +17,42 @@ import CustomInput from '@/components/form/CustomInput';
 import ArrowRightIcon from '@/components/icons/ArrowRightIcon';
 import CustomButton from '@/components/button/CustomButton';
 
-interface IndexProps {}
+interface IndexProps {
+  eventId: string;
+}
 
-const Index: NextPage<IndexProps> = () => {
+const Index: NextPage<IndexProps> = ({ eventId }) => {
   const router = useRouter();
 
   const [type, setType] = useState<'board' | 'channel'>('channel');
   const [name, setName] = useState<string>('');
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
 
+  const { data: profile } = useSWR(['/api/event/me', eventId], () =>
+    MeetworkApi.event.getProfile(eventId),
+  );
+
   const handleBack = useCallback(() => {
     router.back();
   }, [router]);
 
   const handleCreate = useCallback(async () => {
-    if (type === 'channel' && name.trim().length > 0) {
-      const { id } = router.query as { id: string };
+    const { id } = router.query as { id: string };
 
+    if (type === 'channel' && name.trim().length > 0) {
       MeetworkApi.chat
         .createRoom(id, {
           name,
           isPrivate,
           participantIds: [],
         })
+        .then(async () => {
+          await router.replace(`/event/${id}`);
+        });
+    }
+    if (type === 'board' && name.trim().length > 0) {
+      MeetworkApi.board
+        .create({ eventId: id, name, adminOnly: isPrivate })
         .then(async () => {
           await router.replace(`/event/${id}`);
         });
@@ -94,27 +108,29 @@ const Index: NextPage<IndexProps> = () => {
       }}
     >
       <div className="flex flex-1 flex-col">
-        <div className="flex flex-row px-[14px] py-[14px] items-center justify-between">
-          <CustomButton
-            style={classNames(
-              `w-full mx-[6px] rounded-[10px] border-[2px] border-mint`,
-              buttonStyle('board'),
-            )}
-            label="게시판"
-            onClick={handleOnClickBoard}
-          />
-          <CustomButton
-            style={classNames(
-              `w-full mx-[6px] rounded-[10px] border-[2px] border-mint`,
-              buttonStyle('channel'),
-            )}
-            label="채팅"
-            onClick={handleOnClickChannel}
-          />
-        </div>
+        <Conditional condition={profile?.isAdmin ?? false}>
+          <div className="flex flex-row px-[14px] py-[14px] items-center justify-between">
+            <CustomButton
+              style={classNames(
+                `w-full mx-[6px] rounded-[10px] border-[2px] border-mint`,
+                buttonStyle('board'),
+              )}
+              label="게시판"
+              onClick={handleOnClickBoard}
+            />
+            <CustomButton
+              style={classNames(
+                `w-full mx-[6px] rounded-[10px] border-[2px] border-mint`,
+                buttonStyle('channel'),
+              )}
+              label="채팅"
+              onClick={handleOnClickChannel}
+            />
+          </div>
+        </Conditional>
 
         <Separator label="채널 이름" />
-        <div className="px-[10px] py-[8px]">
+        <div className="px-[22px] py-[8px]">
           <CustomInput
             value={name}
             setValue={setName}
@@ -123,26 +139,26 @@ const Index: NextPage<IndexProps> = () => {
           />
         </div>
 
+        <Separator label="채널 권한" />
+        <div className="flex flex-row px-[22px] py-[16px] items-center justify-between">
+          <span className="font-[400] text-[16px] text-black">
+            {type === 'board' ? '관리자만 글쓰기' : '비공개 채널'}
+          </span>
+          <ReactSwitch
+            checked={isPrivate}
+            onChange={handleOnSwitch}
+            onColor="#9BD1DD"
+            offColor="#677181"
+            checkedIcon={false}
+            uncheckedIcon={false}
+            handleDiameter={12}
+            width={32}
+            height={16}
+          />
+        </div>
+
         <Conditional condition={type === 'channel'}>
           <>
-            <Separator label="채널 권한" />
-            <div className="flex flex-row px-[22px] py-[16px] items-center justify-between">
-              <span className="font-[400] text-[16px] text-black">
-                비공개 채널
-              </span>
-              <ReactSwitch
-                checked={isPrivate}
-                onChange={handleOnSwitch}
-                onColor="#9BD1DD"
-                offColor="#677181"
-                checkedIcon={false}
-                uncheckedIcon={false}
-                handleDiameter={12}
-                width={32}
-                height={16}
-              />
-            </div>
-
             <Separator label="채널에 접근할 수 있는 멤버" />
             <div className="flex flex-row px-[22px] py-[16px] border-b-[1px] border-gray items-center justify-between">
               <span className="font-[400] text-[16px] text-mint">추가하기</span>
@@ -155,6 +171,16 @@ const Index: NextPage<IndexProps> = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withAuthSSR();
+export const getServerSideProps: GetServerSideProps = withAuthSSR(
+  async (context: GetServerSidePropsContext) => {
+    const { id } = context.query as { id: string };
+
+    return {
+      props: {
+        eventId: id,
+      } as IndexProps,
+    };
+  },
+);
 
 export default Index;
