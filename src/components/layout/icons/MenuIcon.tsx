@@ -1,16 +1,20 @@
 import React, { useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
 
-const HomeIcon: React.FC = () => {
+const reg = /^\/event\/[a-zA-Z0-9\-]+[a-zA-Z0-9]$/;
+
+const MenuIcon: React.FC = () => {
   const router = useRouter();
 
-  const color = useMemo<string>(
-    () => (router.asPath.split('?')[0].trim() === '/' ? '#9BD1DD' : '#ECECEC'),
+  const color = useMemo(
+    () => (reg.test(router.asPath) ? '#9BD1DD' : '#ECECEC'),
     [router.asPath],
   );
 
   const handleOnClick = useCallback(async () => {
-    await router.push('/');
+    const { id } = (await router.query) as { id: string };
+
+    await router.push(`/event/${id}`);
   }, [router]);
 
   return (
@@ -19,21 +23,28 @@ const HomeIcon: React.FC = () => {
       onClick={handleOnClick}
     >
       <svg
+        xmlns="http://www.w3.org/2000/svg"
         width="30"
         height="30"
         viewBox="0 0 30 30"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M3.75 11.25L15 2.5L26.25 11.25V25C26.25 25.663 25.9866 26.2989 25.5178 26.7678C25.0489 27.2366 24.413 27.5 23.75 27.5H6.25C5.58696 27.5 4.95107 27.2366 4.48223 26.7678C4.01339 26.2989 3.75 25.663 3.75 25V11.25Z"
+          d="M3.75 15H26.25"
           stroke={color}
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <path
-          d="M11.25 27.5V15H18.75V27.5"
+          d="M3.75 7.5H26.25"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M3.75 22.5H26.25"
           stroke={color}
           strokeWidth="2"
           strokeLinecap="round"
@@ -44,4 +55,4 @@ const HomeIcon: React.FC = () => {
   );
 };
 
-export default HomeIcon;
+export default MenuIcon;
