@@ -9,6 +9,7 @@ import { MeetworkApi } from '@/operations';
 import EventLayout from '@/components/layout/EventLayout';
 import ChannelItem from '@/components/event/ChannelItem';
 import BoardItem from '@/components/event/BoardItem';
+import SearchChatRoom from '@/components/event/new/SearchChatRoom';
 
 interface EventProps {
   eventId: string;
@@ -43,6 +44,10 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
     [handleOnclick],
   );
 
+  const handleSearch = useCallback(async () => {
+    await router.replace(router.asPath + '?search=true');
+  }, [router]);
+
   return (
     <EventLayout
       header={{
@@ -52,6 +57,17 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
       }}
     >
       <div className="flex flex-1 flex-col">
+        <section className="flex px-[20px] py-[14px]">
+          <div
+            className="flex w-full px-[18px] py-[12px] rounded-[10px] border-[1px] border-lightGray items-center bg-[#FCFCFC]"
+            onClick={handleSearch}
+          >
+            <span className="font-[400] text-[16px] text-lightGray leading-[18.6px]">
+              다음으로 이동...
+            </span>
+          </div>
+        </section>
+
         <section className="flex flex-col">
           <header className="flex flex-row p-[16px] border-t-[1px] border-t-gray">
             <span className="font-[600] text-[16px] text-black">게시판</span>
@@ -71,6 +87,8 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
             <ChannelItem key={room.id} channel={room} />
           ))}
         </section>
+
+        <SearchChatRoom eventId={eventId} />
       </div>
     </EventLayout>
   );

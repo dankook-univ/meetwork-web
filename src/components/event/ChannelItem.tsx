@@ -19,7 +19,7 @@ const ChannelItem: React.FC<ChannelItemProps> = ({ channel }) => {
 
   return (
     <div
-      className="flex flex-1 flex-row px-[16px] py-[14px] items-center"
+      className="flex flex-row px-[16px] py-[14px] items-center"
       onClick={handleOnClick}
     >
       <Image src="/icons/channel.svg" width={24} height={24} alt="" />
