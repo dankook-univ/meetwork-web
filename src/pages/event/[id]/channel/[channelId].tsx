@@ -1,7 +1,14 @@
-import React, { useCallback, useMemo } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import { Client } from '@stomp/stompjs';
 
 import { withAuthSSR } from '@/utils/session/withAuth';
 import { MeetworkApi } from '@/operations';
@@ -13,13 +20,25 @@ import InputMessage from '@/components/event/InputMessage';
 import MessageItem from '@/components/event/MessageItem';
 
 interface ChannelProps {
+  token: string;
+  baseUrl: string;
   eventId: string;
   channelId: string;
 }
 
-const Channel: NextPage<ChannelProps> = ({ eventId, channelId }) => {
+const Channel: NextPage<ChannelProps> = ({
+  token,
+  baseUrl,
+  eventId,
+  channelId,
+}) => {
   const router = useRouter();
+  const client = useRef<Client>();
+  const messageRef = useRef<HTMLDivElement>(null);
 
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+  const { data: me } = useSWR(`/api/user/me`, MeetworkApi.user.me);
   const { data: room } = useSWR([`/api/chat/${eventId}/${channelId}`], () =>
     MeetworkApi.chat.getChatRoom(eventId, channelId),
   );
@@ -28,10 +47,45 @@ const Channel: NextPage<ChannelProps> = ({ eventId, channelId }) => {
     () => MeetworkApi.chat.getMessages(eventId, channelId),
   );
 
-  const messages = useMemo<ChatMessage[]>(
-    () => (messageList !== undefined ? [...messageList] : []),
-    [messageList],
-  );
+  useEffect(() => {
+    if (messageList) {
+      setMessages(messageList);
+    }
+  }, [messageList]);
+
+  const connect = useCallback(() => {
+    client.current = new Client({
+      brokerURL: baseUrl,
+      connectHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+      onConnect: () => {
+        client.current?.subscribe(`/subscribe/chat/${me?.id}`, (res) => {
+          const newMessage = JSON.parse(res.body) as ChatMessage;
+          if (newMessage.room.id === channelId) {
+            setMessages((prev) => [newMessage, ...prev]);
+          }
+        });
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    client.current.activate();
+  }, [baseUrl, channelId, me?.id, token]);
+
+  useEffect(() => {
+    connect();
+
+    return () => {
+      client.current?.deactivate();
+    };
+  }, [connect]);
+
+  useEffect(() => {
+    messageRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages.length]);
 
   const handleBack = useCallback(() => {
     router.back();
@@ -51,12 +105,13 @@ const Channel: NextPage<ChannelProps> = ({ eventId, channelId }) => {
       footerShown={false}
     >
       <div className="flex flex-1 flex-col">
-        <section className="flex flex-1 flex-col-reverse">
+        <div className="flex flex-1 flex-col-reverse">
           {messages.map((message) => (
             <MessageItem key={message.id} message={message} />
           ))}
-        </section>
+        </div>
 
+        <div className="bottom-[-74px] h-0" ref={messageRef} />
         <InputMessage eventId={eventId} channelId={channelId} />
       </div>
     </EventLayout>
@@ -64,11 +119,14 @@ const Channel: NextPage<ChannelProps> = ({ eventId, channelId }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = withAuthSSR(
-  async (req: GetServerSidePropsContext) => {
-    const { id, channelId } = await req.query;
+  async (context: GetServerSidePropsContext) => {
+    const { id, channelId } = await context.query;
 
     return {
       props: {
+        token: context.req.session.token?.accessToken,
+        baseUrl:
+          (process.env.BASE_URL as string).replace('http://', 'ws://') + '/ws',
         eventId: id,
         channelId,
       } as ChannelProps,

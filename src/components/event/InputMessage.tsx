@@ -17,14 +17,14 @@ const InputMessage: React.FC<InputMessageProps> = ({ eventId, channelId }) => {
     [setMessage],
   );
 
-  const handleOnClick = useCallback(async () => {
+  const handleOnSubmit = useCallback(async () => {
     await MeetworkApi.chat.sendMessage(eventId, channelId, { message });
 
     setMessage('');
   }, [eventId, channelId, message, setMessage]);
 
   return (
-    <div className="flex flex-row p-[24px] rounded-t-[15px] border-t-[1px] border-t-lightGray justify-between">
+    <div className="sticky bottom-0 flex flex-row w-screen min-h-[74px] px-[24px] rounded-t-[15px] border-t-[1px] border-t-lightGray items-center justify-between bg-white">
       <input
         className="flex flex-1 bg-transparent focus:outline-none caret-pink font-normal text-[14px] text-black placeholder:font-normal placeholder:font-[14px] placeholder:text-gray mr-[8px]"
         placeholder="메시지 보내기"
@@ -34,7 +34,7 @@ const InputMessage: React.FC<InputMessageProps> = ({ eventId, channelId }) => {
 
       <div
         className="w-[24px] h-[24px] items-center justify-center"
-        onClick={handleOnClick}
+        onClick={handleOnSubmit}
       >
         <Image src="/icons/arrow-up-circle.svg" width={24} height={24} alt="" />
       </div>

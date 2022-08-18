@@ -455,6 +455,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/stompjs@npm:^2":
+  version: 2.3.5
+  resolution: "@types/stompjs@npm:2.3.5"
+  dependencies:
+    "@types/node": "*"
+  checksum: 46656e4fd52593fbacca35647280163eb04c48d53a296cb1eb8297d8137667fe53c555009c7b6743c2a82935d14c9bb76c69505966e0bc30a32f14dabaff2c68
+  languageName: node
+  linkType: hard
+
 "@types/websocket@npm:^1":
   version: 1.0.5
   resolution: "@types/websocket@npm:1.0.5"
@@ -2519,6 +2528,7 @@ __metadata:
     "@types/node": 18.6.4
     "@types/react": 18.0.15
     "@types/react-dom": 18.0.6
+    "@types/stompjs": ^2
     "@types/websocket": ^1
     autoprefixer: ^10.4.8
     axios: ^0.27.2
@@ -2536,6 +2546,8 @@ __metadata:
     react-dom: 18.2.0
     react-switch: ^7.0.0
     recoil: ^0.7.4
+    socket-client: ^1.0.0
+    stompjs: ^2.3.3
     swr: ^1.3.0
     tailwind-scrollbar-hide: ^1.1.7
     tailwindcss: ^3.1.8
@@ -3560,6 +3572,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"socket-client@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "socket-client@npm:1.0.0"
+  checksum: 294ce27057e5754dbad83fd761bd59cd608996e42ef9ae4f3f3e18ea253bb789375a81c04b3e12ee12462d85bc5f6b640c4a8b5bce4df82858b7fc8aeed3d920
+  languageName: node
+  linkType: hard
+
 "socks-proxy-agent@npm:^7.0.0":
   version: 7.0.0
   resolution: "socks-proxy-agent@npm:7.0.0"
@@ -3594,6 +3613,18 @@ __metadata:
   dependencies:
     minipass: ^3.1.1
   checksum: fb58f5e46b6923ae67b87ad5ef1c5ab6d427a17db0bead84570c2df3cd50b4ceb880ebdba2d60726588272890bae842a744e1ecce5bd2a2a582fccd5068309eb
+  languageName: node
+  linkType: hard
+
+"stompjs@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "stompjs@npm:2.3.3"
+  dependencies:
+    websocket: latest
+  dependenciesMeta:
+    websocket:
+      optional: true
+  checksum: b7a1f6ac316943e0b31eba1525739fac56b41ad254ab0cd34853a9223c052c0b70ea887c09239932637680d21c5480cbd30b5ba0ccf9abd71e03498a2cef1f5d
   languageName: node
   linkType: hard
 
@@ -3971,7 +4002,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"websocket@npm:^1.0.34":
+"websocket@npm:^1.0.34, websocket@npm:latest":
   version: 1.0.34
   resolution: "websocket@npm:1.0.34"
   dependencies:
