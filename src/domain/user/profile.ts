@@ -5,4 +5,8 @@ export interface Profile extends Core {
   nickname: string;
   bio: string;
   member: User;
+  profileImage?: {
+    id: string;
+    url: string;
+  };
 }

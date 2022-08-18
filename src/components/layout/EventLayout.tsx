@@ -5,22 +5,26 @@ import MenuIcon from '@/components/layout/icons/MenuIcon';
 import HomeIcon from '@/components/layout/icons/HomeIcon';
 import UsersIcon from '@/components/layout/icons/UsersIcon';
 
-interface EventLayoutProps extends Omit<BasicLayoutProps, 'footer'> {}
+interface EventLayoutProps extends Omit<BasicLayoutProps, 'footer'> {
+  footerShown?: boolean;
+}
 
 const EventLayout: React.FC<EventLayoutProps> = ({
   children,
   header,
   container,
+  footerShown = true,
 }) => {
-  const footer = useMemo<JSX.Element>(
-    () => (
-      <>
-        <MenuIcon />
-        <HomeIcon />
-        <UsersIcon />
-      </>
-    ),
-    [],
+  const footer = useMemo<JSX.Element | undefined>(
+    () =>
+      footerShown ? (
+        <>
+          <MenuIcon />
+          <HomeIcon />
+          <UsersIcon />
+        </>
+      ) : undefined,
+    [footerShown],
   );
 
   return (
