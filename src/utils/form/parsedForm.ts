@@ -1,5 +1,5 @@
 import { NextApiRequest } from 'next';
-import { Files, IncomingForm } from 'formidable';
+import { File, Files, IncomingForm } from 'formidable';
 import FormData from 'form-data';
 import fs from 'fs';
 
@@ -25,7 +25,9 @@ export const getParsedForm = async (req: NextApiRequest): Promise<FormData> => {
   });
 
   Object.entries(parsed.files).map(([key, value]) => {
-    form.append(key, fs.createReadStream((value as any)?.filepath));
+    form.append(key, fs.createReadStream((value as File)?.filepath), {
+      filename: (value as File)?.originalFilename ?? '',
+    });
   });
 
   return form;
