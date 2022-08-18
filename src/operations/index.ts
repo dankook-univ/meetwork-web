@@ -1,9 +1,11 @@
 import AuthApi from '@/operations/auth';
-import UserApi from '@/operations/user';
+import ChatApi from '@/operations/chat';
 import EventApi from '@/operations/event';
+import UserApi from '@/operations/user';
 
 export const MeetworkApi = {
   auth: AuthApi,
-  user: UserApi,
+  chat: ChatApi,
   event: EventApi,
+  user: UserApi,
 };

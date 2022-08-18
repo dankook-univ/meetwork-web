@@ -7,6 +7,7 @@ import useSWR from 'swr';
 import { withAuthSSR } from '@/utils/session/withAuth';
 import { MeetworkApi } from '@/operations';
 import EventLayout from '@/components/layout/EventLayout';
+import ChannelItem from '@/components/event/ChannelItem';
 
 interface EventProps {
   eventId: string;
@@ -15,13 +16,16 @@ interface EventProps {
 const Event: NextPage<EventProps> = ({ eventId }) => {
   const router = useRouter();
 
-  const { data } = useSWR(['/api/event', eventId], () =>
+  const { data: event } = useSWR(['/api/event', eventId], () =>
     MeetworkApi.event.get(eventId),
+  );
+  const { data: rooms } = useSWR(['/api/chat', eventId], () =>
+    MeetworkApi.chat.getParticipantChatRooms(eventId),
   );
 
   const handleOnclick = useCallback(async () => {
-    await router.push('/event/new');
-  }, [router]);
+    await router.push(`/event/${eventId}/new`);
+  }, [eventId, router]);
 
   const headerRight = useMemo(
     () => (
@@ -38,12 +42,28 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
   return (
     <EventLayout
       header={{
-        title: data?.name ?? '',
+        title: event?.name ?? '',
         titleAlign: 'left',
         right: headerRight,
       }}
     >
-      <></>
+      <div className="flex flex-1 flex-col">
+        <section className="flex flex-col">
+          <header className="flex flex-row p-[16px] border-t-[1px] border-t-gray">
+            <span className="font-[600] text-[16px] text-black">게시판</span>
+          </header>
+        </section>
+
+        <section className="flex flex-col">
+          <header className="flex flex-row p-[16px] border-t-[1px] border-t-gray">
+            <span className="font-[600] text-[16px] text-black">채팅</span>
+          </header>
+
+          {rooms?.map((room) => (
+            <ChannelItem key={room.id} channel={room} />
+          ))}
+        </section>
+      </div>
     </EventLayout>
   );
 };

@@ -1,17 +1,20 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ReactSwitch from 'react-switch';
+import classNames from 'classnames';
 
 import { withAuthSSR } from '@/utils/session/withAuth';
+import { MeetworkApi } from '@/operations';
+import Conditional from '@/hocs/Conditional';
+
 import EventLayout from '@/components/layout/EventLayout';
 import HeaderBackButton from '@/components/button/HeaderBackButton';
 import Separator from '@/components/event/new/Separator';
 import CustomInput from '@/components/form/CustomInput';
 import ArrowRightIcon from '@/components/icons/ArrowRightIcon';
 import CustomButton from '@/components/button/CustomButton';
-import classNames from 'classnames';
-import Conditional from '@/hocs/Conditional';
 
 interface IndexProps {}
 
@@ -26,9 +29,37 @@ const Index: NextPage<IndexProps> = () => {
     router.back();
   }, [router]);
 
+  const handleCreate = useCallback(async () => {
+    if (type === 'channel' && name.trim().length > 0) {
+      const { id } = router.query as { id: string };
+
+      MeetworkApi.chat
+        .createRoom(id, {
+          name,
+          isPrivate,
+          participantIds: [],
+        })
+        .then(async () => {
+          await router.replace(`/event/${id}`);
+        });
+    }
+  }, [router, type, name, isPrivate]);
+
   const headerLeft = useMemo(
     () => <HeaderBackButton onClick={handleBack} />,
     [handleBack],
+  );
+
+  const headerRight = useMemo(
+    () => (
+      <div
+        className="w-[24px] h-[24px] items-center justify-center"
+        onClick={handleCreate}
+      >
+        <Image src="/icons/check.svg" width={24} height={24} alt="" />
+      </div>
+    ),
+    [handleCreate],
   );
 
   const buttonStyle = useCallback(
@@ -59,6 +90,7 @@ const Index: NextPage<IndexProps> = () => {
         color: 'white',
         textColor: 'black',
         left: headerLeft,
+        right: headerRight,
       }}
     >
       <div className="flex flex-1 flex-col">
