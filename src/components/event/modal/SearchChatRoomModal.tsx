@@ -1,16 +1,20 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import classNames from 'classnames';
 import useSWR from 'swr';
+import classNames from 'classnames';
+
 import { MeetworkApi } from '@/operations';
 import { ChatRoom } from '@/domain/chat/chat-room';
+
 import ChannelItem from '@/components/event/ChannelItem';
 
-interface SearchChatRoomProps {
+interface SearchChatRoomModalProps {
   eventId: string;
 }
 
-const SearchChatRoom: React.FC<SearchChatRoomProps> = ({ eventId }) => {
+const SearchChatRoomModal: React.FC<SearchChatRoomModalProps> = ({
+  eventId,
+}) => {
   const router = useRouter();
 
   const { data } = useSWR(['/api/chat/', eventId], () =>
@@ -69,4 +73,4 @@ const SearchChatRoom: React.FC<SearchChatRoomProps> = ({ eventId }) => {
   );
 };
 
-export default SearchChatRoom;
+export default SearchChatRoomModal;

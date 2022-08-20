@@ -9,7 +9,7 @@ import { MeetworkApi } from '@/operations';
 import EventLayout from '@/components/layout/EventLayout';
 import ChannelItem from '@/components/event/ChannelItem';
 import BoardItem from '@/components/event/BoardItem';
-import SearchChatRoom from '@/components/event/new/SearchChatRoom';
+import SearchChatRoomModal from '@/components/event/modal/SearchChatRoomModal';
 
 interface EventProps {
   eventId: string;
@@ -88,7 +88,7 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
           ))}
         </section>
 
-        <SearchChatRoom eventId={eventId} />
+        <SearchChatRoomModal eventId={eventId} />
       </div>
     </EventLayout>
   );

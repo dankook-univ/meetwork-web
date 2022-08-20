@@ -2,6 +2,7 @@ import AuthApi from '@/operations/auth';
 import BoardApi from '@/operations/board';
 import ChatApi from '@/operations/chat';
 import EventApi from '@/operations/event';
+import ProfileApi from '@/operations/profile';
 import UserApi from '@/operations/user';
 
 export const MeetworkApi = {
@@ -9,5 +10,6 @@ export const MeetworkApi = {
   board: BoardApi,
   chat: ChatApi,
   event: EventApi,
+  profile: ProfileApi,
   user: UserApi,
 };
