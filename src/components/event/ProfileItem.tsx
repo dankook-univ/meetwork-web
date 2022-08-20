@@ -63,15 +63,6 @@ const ProfileItem: React.FC<ProfileItemProps> = ({
               onClick={handleInfo}
             />
           </Conditional>
-
-          <Conditional condition={!isMine}>
-            <Image
-              src="/icons/message-circle.svg"
-              width={24}
-              height={24}
-              alt=""
-            />
-          </Conditional>
         </div>
       </div>
 
