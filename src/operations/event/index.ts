@@ -1,15 +1,17 @@
-import { list } from '@/operations/event/list';
+import { checkCode } from '@/operations/event/checkCode';
+import { create } from '@/operations/event/create';
 import { get } from '@/operations/event/get';
 import { getProfile } from '@/operations/event/getProfile';
-import { create } from '@/operations/event/new';
-import { checkCode } from '@/operations/event/checkCode';
+import { members } from '@/operations/event/members';
+import { list } from '@/operations/event/list';
 
 const EventApi = {
-  list,
+  checkCode,
+  create,
   get,
   getProfile,
-  create,
-  checkCode,
+  members,
+  list,
 };
 
 export default EventApi;
