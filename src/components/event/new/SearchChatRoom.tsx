@@ -40,6 +40,10 @@ const SearchChatRoom: React.FC<SearchChatRoomProps> = ({ eventId }) => {
     [setSearch],
   );
 
+  const handleOnClick = useCallback(async (eventId: string, roomId: string) => {
+    await MeetworkApi.chat.join(eventId, roomId);
+  }, []);
+
   return (
     <div
       className={classNames(
@@ -58,7 +62,7 @@ const SearchChatRoom: React.FC<SearchChatRoomProps> = ({ eventId }) => {
         </div>
 
         {rooms.map((room) => (
-          <ChannelItem key={room.id} channel={room} />
+          <ChannelItem key={room.id} channel={room} onClick={handleOnClick} />
         ))}
       </div>
     </div>

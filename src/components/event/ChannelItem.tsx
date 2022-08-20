@@ -6,16 +6,21 @@ import { ChatRoom } from '@/domain/chat/chat-room';
 
 interface ChannelItemProps {
   channel: ChatRoom;
+  onClick?: (eventId: string, roomId: string) => void;
 }
 
-const ChannelItem: React.FC<ChannelItemProps> = ({ channel }) => {
+const ChannelItem: React.FC<ChannelItemProps> = ({ channel, onClick }) => {
   const router = useRouter();
 
   const handleOnClick = useCallback(async () => {
     const { id } = router.query as { id: string };
 
+    if (onClick) {
+      onClick(id, channel.id);
+    }
+
     await router.push(`/event/${id}/channel/${channel.id}`);
-  }, [channel.id, router]);
+  }, [channel.id, router, onClick]);
 
   return (
     <div
