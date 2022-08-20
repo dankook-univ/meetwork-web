@@ -24,7 +24,10 @@ const ParticipatingEventItem: React.FC<ParticipatingEventItemProps> = ({
   }, [router, event]);
 
   return (
-    <div className="flex flex-row w-screen p-[16px]" onClick={handleOnClick}>
+    <div
+      className="flex flex-row w-screen p-[16px] items-center"
+      onClick={handleOnClick}
+    >
       <div className="flex flex-1 flex-col max-w-[calc(100vw-56px)]">
         <span className="font-[600] text-[16px] text-black truncate">
           {event.name}

@@ -47,6 +47,7 @@ const ProfileInfoModal: React.FC<ProfileInfoModalProps> = ({ profile }) => {
         <div className="w-[132px] h-[132px] mb-[26px] items-center justify-center">
           <Conditional condition={profile.profileImage !== null}>
             <Image
+              className="rounded-[100%]"
               src={profile.profileImage?.url ?? ''}
               width={132}
               height={132}
@@ -67,7 +68,6 @@ const ProfileInfoModal: React.FC<ProfileInfoModalProps> = ({ profile }) => {
         </span>
 
         <Image
-          className="pointer-events-auto"
           src="/icons/settings.svg"
           width={24}
           height={24}

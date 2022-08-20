@@ -28,6 +28,7 @@ const ProfileItem: React.FC<ProfileItemProps> = ({
         <div className="w-[50px] h-[50px] mr-[16px]">
           <Conditional condition={profile.profileImage !== null}>
             <Image
+              className="rounded-[100%]"
               src={profile.profileImage?.url ?? ''}
               width={50}
               height={50}

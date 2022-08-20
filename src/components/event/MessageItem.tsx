@@ -15,6 +15,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
       <div className="flex h-full mr-[6px] items-start">
         <Conditional condition={message.sender.profileImage !== null}>
           <Image
+            className="rounded-[100%]"
             src={message.sender.profileImage?.url ?? ''}
             width={50}
             height={50}
