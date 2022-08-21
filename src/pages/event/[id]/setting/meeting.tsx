@@ -16,10 +16,10 @@ interface MeetingProps {
   eventId: string;
 }
 
-const Meeting: NextPage<MeetingProps> = ({eventId}) => {
+const Meeting: NextPage<MeetingProps> = ({ eventId }) => {
   const router = useRouter();
 
-  const {data: event, mutate} = useSWR(['/api/event', eventId], () =>
+  const { data: event, mutate } = useSWR(['/api/event', eventId], () =>
     MeetworkApi.event.get(eventId),
   );
 
@@ -36,21 +36,21 @@ const Meeting: NextPage<MeetingProps> = ({eventId}) => {
   }, [router]);
 
   const headerLeft = useMemo(
-    () => <HeaderBackButton onClick={handleBack}/>,
+    () => <HeaderBackButton onClick={handleBack} />,
     [handleBack],
   );
 
   const handleChange = useCallback(async () => {
     if (url !== null) {
-      await MeetworkApi.event.update(eventId, {meetingUrl: url})
+      await MeetworkApi.event.update(eventId, { meetingUrl: url });
       await mutate();
 
-      router.back()
+      router.back();
     }
   }, [eventId, mutate, router, url]);
 
   const headerRight = useMemo(
-    () => <CheckButton onClick={handleChange}/>,
+    () => <CheckButton onClick={handleChange} />,
     [handleChange],
   );
 
@@ -86,7 +86,7 @@ const Meeting: NextPage<MeetingProps> = ({eventId}) => {
 
 export const getServerSideProps: GetServerSideProps = withAuthSSR(
   async (context: GetServerSidePropsContext) => {
-    const {id} = (await context.query) as { id: string };
+    const { id } = (await context.query) as { id: string };
 
     return {
       props: {
@@ -95,4 +95,5 @@ export const getServerSideProps: GetServerSideProps = withAuthSSR(
     };
   },
 );
+
 export default Meeting;
