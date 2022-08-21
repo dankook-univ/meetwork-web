@@ -52,6 +52,11 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
           participantIds: createChannel.profiles.map((it) => it.id),
         })
         .then(async () => {
+          setCreateChannel({
+            name: '',
+            select: false,
+            profiles: [],
+          });
           await router.replace(`/event/${eventId}`);
         });
     }
@@ -63,10 +68,15 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
           adminOnly: createChannel.select,
         })
         .then(async () => {
+          setCreateChannel({
+            name: '',
+            select: false,
+            profiles: [],
+          });
           await router.replace(`/event/${eventId}`);
         });
     }
-  }, [type, eventId, router, createChannel]);
+  }, [type, createChannel, eventId, setCreateChannel, router]);
 
   const headerLeft = useMemo(
     () => <HeaderBackButton onClick={handleBack} />,

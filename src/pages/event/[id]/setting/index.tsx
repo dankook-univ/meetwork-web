@@ -34,6 +34,10 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
     await router.push(`${router.asPath}/name`);
   }, [router]);
 
+  const handleChannel = useCallback(async () => {
+    await router.push(`${router.asPath}/channel`);
+  }, [router]);
+
   const handleChangeMeetingUrl = useCallback(async () => {
     await router.push(`${router.asPath}/meeting`);
   }, [router]);
@@ -60,7 +64,10 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
           </div>
         </Conditional>
 
-        <div className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray">
+        <div
+          className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray"
+          onClick={handleChannel}
+        >
           <span className="font-[400] text-[16px] text-black">채널</span>
         </div>
 

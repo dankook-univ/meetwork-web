@@ -5,14 +5,17 @@ import { Board } from '@/domain/board';
 
 interface BoardItemProps {
   board: Board;
+  disable?: boolean;
 }
 
-const BoardItem: React.FC<BoardItemProps> = ({ board }) => {
+const BoardItem: React.FC<BoardItemProps> = ({ board, disable = false }) => {
   const router = useRouter();
 
   const handleOnClick = useCallback(async () => {
-    const { id } = router.query as { id: string };
-  }, [board.id, router]);
+    if (!disable) {
+      const { id } = router.query as { id: string };
+    }
+  }, [disable, board.id, router]);
 
   return (
     <div

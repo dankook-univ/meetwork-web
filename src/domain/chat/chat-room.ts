@@ -4,7 +4,7 @@ import { Event } from '@/domain/event/event';
 
 export interface ChatRoom extends Core {
   name: string;
-  isPrivate: string;
+  isPrivate: boolean;
   organizer: Profile;
   event: Event;
   participants: Profile[];
