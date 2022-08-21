@@ -48,6 +48,10 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
     await router.replace(router.asPath + '?search=true');
   }, [router]);
 
+  const handleSetting = useCallback(async () => {
+    await router.push(`/event/${eventId}/setting`);
+  }, [eventId, router]);
+
   return (
     <EventLayout
       header={{
@@ -87,6 +91,19 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
             <ChannelItem key={room.id} channel={room} />
           ))}
         </section>
+
+        <div className="flex flex-1" />
+
+        <div
+          className="sticky bottom-0 flex flex-row px-[16px] py-[14px] items-center"
+          onClick={handleSetting}
+        >
+          <Image src="/icons/plus-circle.svg" width={24} height={24} alt="" />
+
+          <span className="font-[600] text-[16px] text-lightGray ml-[8px]">
+            관리
+          </span>
+        </div>
 
         <SearchChatRoomModal eventId={eventId} />
       </div>

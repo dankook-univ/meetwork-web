@@ -4,6 +4,7 @@ import { get } from '@/operations/event/get';
 import { getProfile } from '@/operations/event/getProfile';
 import { members } from '@/operations/event/members';
 import { list } from '@/operations/event/list';
+import { update } from '@/operations/event/update';
 
 const EventApi = {
   checkCode,
@@ -12,6 +13,7 @@ const EventApi = {
   getProfile,
   members,
   list,
+  update,
 };
 
 export default EventApi;

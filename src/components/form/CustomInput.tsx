@@ -35,7 +35,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   return (
     <input
       className={classNames(
-        `flex w-full h-[44px] border-b-[1px] border-b-lightGray focus:outline-none caret-primary bg-white font-[400] text-[20px] text-black`,
+        `flex w-full h-[44px] border-b-[1px] border-b-lightGray focus:outline-none caret-primary bg-white font-[400] text-[20px] text-black placeholder:text-gray`,
         'outline-0',
         ` text-${align}`,
         textStyle,
