@@ -10,6 +10,7 @@ import EventLayout from '@/components/layout/EventLayout';
 import ChannelItem from '@/components/event/ChannelItem';
 import BoardItem from '@/components/event/BoardItem';
 import SearchChatRoomModal from '@/components/event/modal/SearchChatRoomModal';
+import Conditional from '@/hocs/Conditional';
 
 interface EventProps {
   eventId: string;
@@ -92,10 +93,35 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
           ))}
         </section>
 
+        <Conditional
+          condition={!!event?.meetingUrl && event?.meetingUrl.length > 0}
+        >
+          <a href={event?.meetingUrl} target="_blank" rel="noreferrer">
+            <div className="flex flex-row px-[16px] py-[14px] border-t-[1px] border-t-gray items-center justify-between">
+              <span className="font-[600] text-[16px] text-black">
+                Meeting Room
+              </span>
+
+              <Image
+                src="/icons/chevron-right.svg"
+                width={24}
+                height={24}
+                alt=""
+              />
+            </div>
+          </a>
+        </Conditional>
+
+        <div className="flex flex-row px-[16px] py-[14px] border-y-[1px] border-y-gray items-center justify-between">
+          <span className="font-[600] text-[16px] text-black">퀴즈</span>
+
+          <Image src="/icons/chevron-right.svg" width={24} height={24} alt="" />
+        </div>
+
         <div className="flex flex-1" />
 
         <div
-          className="sticky bottom-0 flex flex-row px-[16px] py-[14px] items-center"
+          className="sticky bottom-0 flex flex-row px-[16px] py-[14px] border-t-[1px] border-t-gray items-center"
           onClick={handleSetting}
         >
           <Image src="/icons/plus-circle.svg" width={24} height={24} alt="" />
