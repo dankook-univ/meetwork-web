@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import useSWR from 'swr';
+
+import { MeetworkApi } from '@/operations';
 import { withAuthSSR } from '@/utils/session/withAuth';
 
 import EventLayout from '@/components/layout/EventLayout';
 import HeaderBackButton from '@/components/button/HeaderBackButton';
 import CheckButton from '@/components/button/CheckButton';
 import CustomInput from '@/components/form/CustomInput';
-import useSWR from 'swr';
-import { MeetworkApi } from '@/operations';
 import Conditional from '@/hocs/Conditional';
 
 interface NameProps {
