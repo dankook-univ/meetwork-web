@@ -3,7 +3,9 @@ import classNames from 'classnames';
 
 interface CustomInputProps {
   value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue: (
+    value: string,
+  ) => void | React.Dispatch<React.SetStateAction<string>>;
   placeholder?: string;
   align?: 'left' | 'center';
   textStyle?: React.HTMLAttributes<JSX.IntrinsicElements['input']>['className'];
@@ -34,6 +36,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
     <input
       className={classNames(
         `flex w-full h-[44px] border-b-[1px] border-b-lightGray focus:outline-none caret-primary bg-white font-[400] text-[20px] text-black`,
+        'outline-0',
         ` text-${align}`,
         textStyle,
       )}

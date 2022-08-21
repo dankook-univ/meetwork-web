@@ -2,10 +2,15 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
 import ReactSwitch from 'react-switch';
 import classNames from 'classnames';
 import useSWR from 'swr';
 
+import {
+  createChannelState,
+  CreateChannelStateProps,
+} from '@/stores/event/create-channel';
 import { withAuthSSR } from '@/utils/session/withAuth';
 import { MeetworkApi } from '@/operations';
 import Conditional from '@/hocs/Conditional';
@@ -16,6 +21,7 @@ import Separator from '@/components/event/new/Separator';
 import CustomInput from '@/components/form/CustomInput';
 import ArrowRightIcon from '@/components/icons/ArrowRightIcon';
 import CustomButton from '@/components/button/CustomButton';
+import ProfileDeleteItem from '@/components/event/new/ProfileDeleteItem';
 
 interface IndexProps {
   eventId: string;
@@ -24,9 +30,10 @@ interface IndexProps {
 const Index: NextPage<IndexProps> = ({ eventId }) => {
   const router = useRouter();
 
+  const [createChannel, setCreateChannel] =
+    useRecoilState<CreateChannelStateProps>(createChannelState);
+
   const [type, setType] = useState<'board' | 'channel'>('channel');
-  const [name, setName] = useState<string>('');
-  const [isPrivate, setIsPrivate] = useState<boolean>(false);
 
   const { data: profile } = useSWR(['/api/event/me', eventId], () =>
     MeetworkApi.event.getProfile(eventId),
@@ -37,27 +44,29 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
   }, [router]);
 
   const handleCreate = useCallback(async () => {
-    const { id } = router.query as { id: string };
-
-    if (type === 'channel' && name.trim().length > 0) {
+    if (type === 'channel' && createChannel.name.trim().length > 0) {
       MeetworkApi.chat
-        .createRoom(id, {
-          name,
-          isPrivate,
-          participantIds: [],
+        .createRoom(eventId, {
+          name: createChannel.name,
+          isPrivate: createChannel.select,
+          participantIds: createChannel.profiles.map((it) => it.id),
         })
         .then(async () => {
-          await router.replace(`/event/${id}`);
+          await router.replace(`/event/${eventId}`);
         });
     }
-    if (type === 'board' && name.trim().length > 0) {
+    if (type === 'board' && createChannel.name.trim().length > 0) {
       MeetworkApi.board
-        .create({ eventId: id, name, adminOnly: isPrivate })
+        .create({
+          eventId: eventId,
+          name: createChannel.name,
+          adminOnly: createChannel.select,
+        })
         .then(async () => {
-          await router.replace(`/event/${id}`);
+          await router.replace(`/event/${eventId}`);
         });
     }
-  }, [router, type, name, isPrivate]);
+  }, [type, eventId, router, createChannel]);
 
   const headerLeft = useMemo(
     () => <HeaderBackButton onClick={handleBack} />,
@@ -92,10 +101,27 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
 
   const handleOnSwitch = useCallback(
     (checked: boolean) => {
-      setIsPrivate(checked);
+      setCreateChannel((prev) => ({
+        ...prev,
+        select: checked,
+      }));
     },
-    [setIsPrivate],
+    [setCreateChannel],
   );
+
+  const setName = useCallback(
+    (name: string) => {
+      setCreateChannel((prev) => ({
+        ...prev,
+        name,
+      }));
+    },
+    [setCreateChannel],
+  );
+
+  const handleSelectProfile = useCallback(async () => {
+    await router.push(`/event/${eventId}/new/profile`);
+  }, [eventId, router]);
 
   return (
     <EventLayout
@@ -106,6 +132,7 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
         left: headerLeft,
         right: headerRight,
       }}
+      footerShown={false}
     >
       <div className="flex flex-1 flex-col">
         <Conditional condition={profile?.isAdmin ?? false}>
@@ -132,7 +159,7 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
         <Separator label="채널 이름" />
         <div className="px-[22px] py-[8px]">
           <CustomInput
-            value={name}
+            value={createChannel.name}
             setValue={setName}
             placeholder="채널 이름을 입력해주세요."
             textStyle="font-[400] text-[16px]"
@@ -145,7 +172,7 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
             {type === 'board' ? '관리자만 글쓰기' : '비공개 채널'}
           </span>
           <ReactSwitch
-            checked={isPrivate}
+            checked={createChannel.select}
             onChange={handleOnSwitch}
             onColor="#9BD1DD"
             offColor="#677181"
@@ -160,7 +187,13 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
         <Conditional condition={type === 'channel'}>
           <>
             <Separator label="채널에 접근할 수 있는 멤버" />
-            <div className="flex flex-row px-[22px] py-[16px] border-b-[1px] border-gray items-center justify-between">
+            {createChannel.profiles.map((profile) => (
+              <ProfileDeleteItem key={profile.id} profile={profile} />
+            ))}
+            <div
+              className="flex flex-row px-[22px] py-[16px] border-b-[1px] border-gray items-center justify-between"
+              onClick={handleSelectProfile}
+            >
               <span className="font-[400] text-[16px] text-mint">추가하기</span>
               <ArrowRightIcon color="#9BD1DD" />
             </div>

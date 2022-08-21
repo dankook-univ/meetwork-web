@@ -34,7 +34,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@stomp/stompjs", "npm:6.1.2"],\
+            ["@tailwindcss/forms", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:0.5.2"],\
             ["@types/formidable", "npm:2.0.5"],\
+            ["@types/lodash", "npm:4.14.184"],\
             ["@types/node", "npm:18.6.4"],\
             ["@types/react", "npm:18.0.15"],\
             ["@types/react-dom", "npm:18.0.6"],\
@@ -49,6 +51,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["form-data", "npm:4.0.0"],\
             ["formidable", "npm:2.0.1"],\
             ["iron-session", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:6.1.3"],\
+            ["lodash", "npm:4.17.21"],\
             ["next", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:12.2.4"],\
             ["postcss", "npm:8.4.14"],\
             ["prettier", "npm:2.7.1"],\
@@ -424,6 +427,29 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@tailwindcss/forms", [\
+        ["npm:0.5.2", {\
+          "packageLocation": "./.yarn/cache/@tailwindcss-forms-npm-0.5.2-02045682b5-3c4df23491.zip/node_modules/@tailwindcss/forms/",\
+          "packageDependencies": [\
+            ["@tailwindcss/forms", "npm:0.5.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:0.5.2", {\
+          "packageLocation": "./.yarn/__virtual__/@tailwindcss-forms-virtual-4dc05a2acb/0/cache/@tailwindcss-forms-npm-0.5.2-02045682b5-3c4df23491.zip/node_modules/@tailwindcss/forms/",\
+          "packageDependencies": [\
+            ["@tailwindcss/forms", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:0.5.2"],\
+            ["@types/tailwindcss", null],\
+            ["mini-svg-data-uri", "npm:1.4.4"],\
+            ["tailwindcss", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:3.1.8"]\
+          ],\
+          "packagePeers": [\
+            "@types/tailwindcss",\
+            "tailwindcss"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@tootallnate/once", [\
         ["npm:2.0.0", {\
           "packageLocation": "./.yarn/cache/@tootallnate-once-npm-2.0.0-e36cf4f140-ad87447820.zip/node_modules/@tootallnate/once/",\
@@ -503,6 +529,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-json5-npm-0.0.29-f63a7916bd-e60b153664.zip/node_modules/@types/json5/",\
           "packageDependencies": [\
             ["@types/json5", "npm:0.0.29"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/lodash", [\
+        ["npm:4.14.184", {\
+          "packageLocation": "./.yarn/cache/@types-lodash-npm-4.14.184-aec91d64ae-6d9a4d67f7.zip/node_modules/@types/lodash/",\
+          "packageDependencies": [\
+            ["@types/lodash", "npm:4.14.184"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -3053,6 +3088,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["lodash", [\
+        ["npm:4.17.21", {\
+          "packageLocation": "./.yarn/cache/lodash-npm-4.17.21-6382451519-eb835a2e51.zip/node_modules/lodash/",\
+          "packageDependencies": [\
+            ["lodash", "npm:4.17.21"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["lodash.merge", [\
         ["npm:4.6.2", {\
           "packageLocation": "./.yarn/cache/lodash.merge-npm-4.6.2-77cb4416bf-ad580b4bdb.zip/node_modules/lodash.merge/",\
@@ -3120,7 +3164,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["meetwork-web", "workspace:."],\
             ["@stomp/stompjs", "npm:6.1.2"],\
+            ["@tailwindcss/forms", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:0.5.2"],\
             ["@types/formidable", "npm:2.0.5"],\
+            ["@types/lodash", "npm:4.14.184"],\
             ["@types/node", "npm:18.6.4"],\
             ["@types/react", "npm:18.0.15"],\
             ["@types/react-dom", "npm:18.0.6"],\
@@ -3135,6 +3181,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["form-data", "npm:4.0.0"],\
             ["formidable", "npm:2.0.1"],\
             ["iron-session", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:6.1.3"],\
+            ["lodash", "npm:4.17.21"],\
             ["next", "virtual:4bc9a1160fd6af45420f4bd9dd1252c579de37439390ca0855c89a29dcd41ef69c6c7b43b31c599ba3c22a2ffef9ef404efbee16a0ea2aafbe3bb599e35d8fbb#npm:12.2.4"],\
             ["postcss", "npm:8.4.14"],\
             ["prettier", "npm:2.7.1"],\
@@ -3188,6 +3235,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["mime-types", "npm:2.1.35"],\
             ["mime-db", "npm:1.52.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["mini-svg-data-uri", [\
+        ["npm:1.4.4", {\
+          "packageLocation": "./.yarn/cache/mini-svg-data-uri-npm-1.4.4-929f6f1119-997f1fbd8d.zip/node_modules/mini-svg-data-uri/",\
+          "packageDependencies": [\
+            ["mini-svg-data-uri", "npm:1.4.4"]\
           ],\
           "linkType": "HARD"\
         }]\
