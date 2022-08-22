@@ -31,7 +31,7 @@ const Code: NextPage = () => {
 
   useEffect(() => {
     if (code) {
-      setCreateEventState((prev) => ({...prev, code}));
+      setCreateEventState((prev) => ({ ...prev, code }));
       setCodeAvailable(null);
       MeetworkApi.event.checkCode(code).then((res) => {
         setCodeAvailable(!res);
@@ -44,7 +44,7 @@ const Code: NextPage = () => {
   }, [router]);
 
   const headerLeft = useMemo(
-    () => <HeaderBackButton onClick={handleBack}/>,
+    () => <HeaderBackButton onClick={handleBack} />,
     [handleBack],
   );
 
@@ -52,10 +52,10 @@ const Code: NextPage = () => {
     if (text.length === 0 || reg.test(text)) {
       setCode(text);
     }
-  }, [])
+  }, []);
 
   const handleNext = useCallback(async () => {
-    MeetworkApi.event.create({...createEvent, code}).then(async () => {
+    MeetworkApi.event.create({ ...createEvent, code }).then(async () => {
       setCreateEventState({
         name: '',
         code: '',
@@ -92,7 +92,6 @@ const Code: NextPage = () => {
             setValue={setAvailableCode}
             avoidSpace={true}
             error={codeAvailable === false}
-            pattern={'^[a-ZA-Z-]+$'}
           />
 
           <Conditional condition={code.length === 0 || codeAvailable !== false}>
