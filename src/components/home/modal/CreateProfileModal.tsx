@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import useSWR from 'swr';
 import classNames from 'classnames';
 
+import { MeetworkApi } from '@/operations';
 import Conditional from '@/hocs/Conditional';
 
 import CustomInput from '@/components/form/CustomInput';
 import CustomButton from '@/components/button/CustomButton';
-import { MeetworkApi } from '@/operations';
 
 interface CreateProfileModalProps {
   eventId: string;
@@ -15,6 +16,12 @@ interface CreateProfileModalProps {
 
 const CreateProfileModal: React.FC<CreateProfileModalProps> = ({ eventId }) => {
   const router = useRouter();
+
+  const { data: me } = useSWR(['/api/user/me'], MeetworkApi.user.me);
+  const { mutate } = useSWR(
+    ['/api/invitation/list', me?.id],
+    me?.id ? () => MeetworkApi.invitation.list(me?.id) : null,
+  );
 
   const visible = useMemo<boolean>(
     () => router.asPath.includes('?profile=true'),
@@ -65,9 +72,10 @@ const CreateProfileModal: React.FC<CreateProfileModalProps> = ({ eventId }) => {
       bio,
       profileImage: image,
     });
+    await mutate();
 
     await router.replace(router.asPath.replace('?profile=true', ''));
-  }, [eventId, nickname, bio, image, router]);
+  }, [eventId, nickname, bio, image, mutate, router]);
 
   return (
     <div

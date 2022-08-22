@@ -67,7 +67,7 @@ const Index: NextPage = () => {
             <ParticipatingEventItem key={event.id} event={event} />
           ))}
 
-          <Conditional condition={hasMore}>
+          <Conditional condition={eventList.length > 0 && hasMore}>
             <div
               className="flex w-[calc(100%-40px)] py-[14px] mx-[20px] my-[6px] rounded-[10px] items-center justify-center bg-gray"
               onClick={handleNext}
