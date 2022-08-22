@@ -16,7 +16,7 @@ export const join = (
   if (profileImage) form.append('profileImage', profileImage);
 
   return instance
-    .patch<AxiosError, AxiosResponse<Event>>(`/api/event/join/${code}`)
+    .patch<AxiosError, AxiosResponse<Event>>(`/api/event/join/${code}`, form)
     .then((res) => {
       return res.data;
     });
