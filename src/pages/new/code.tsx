@@ -13,6 +13,8 @@ import CustomInput from '@/components/form/CustomInput';
 import CustomButton from '@/components/button/CustomButton';
 import Conditional from '@/hocs/Conditional';
 
+const reg = /^[a-zA-Z\-]+$/;
+
 const Code: NextPage = () => {
   const router = useRouter();
 
@@ -29,7 +31,7 @@ const Code: NextPage = () => {
 
   useEffect(() => {
     if (code) {
-      setCreateEventState((prev) => ({ ...prev, code }));
+      setCreateEventState((prev) => ({...prev, code}));
       setCodeAvailable(null);
       MeetworkApi.event.checkCode(code).then((res) => {
         setCodeAvailable(!res);
@@ -42,12 +44,18 @@ const Code: NextPage = () => {
   }, [router]);
 
   const headerLeft = useMemo(
-    () => <HeaderBackButton onClick={handleBack} />,
+    () => <HeaderBackButton onClick={handleBack}/>,
     [handleBack],
   );
 
+  const setAvailableCode = useCallback((text: string) => {
+    if (text.length === 0 || reg.test(text)) {
+      setCode(text);
+    }
+  }, [])
+
   const handleNext = useCallback(async () => {
-    MeetworkApi.event.create({ ...createEvent, code }).then(async () => {
+    MeetworkApi.event.create({...createEvent, code}).then(async () => {
       setCreateEventState({
         name: '',
         code: '',
@@ -81,9 +89,10 @@ const Code: NextPage = () => {
 
           <CustomInput
             value={code}
-            setValue={setCode}
+            setValue={setAvailableCode}
             avoidSpace={true}
             error={codeAvailable === false}
+            pattern={'^[a-ZA-Z-]+$'}
           />
 
           <Conditional condition={code.length === 0 || codeAvailable !== false}>

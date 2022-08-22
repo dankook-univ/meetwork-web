@@ -12,6 +12,8 @@ import CheckButton from '@/components/button/CheckButton';
 import CustomInput from '@/components/form/CustomInput';
 import Conditional from '@/hocs/Conditional';
 
+const reg = /^[a-zA-Z\-]+$/;
+
 interface NameProps {
   eventId: string;
 }
@@ -83,6 +85,12 @@ const Name: NextPage<NameProps> = ({ eventId }) => {
     [handleChange],
   );
 
+  const setAvailableCode = useCallback((text: string) => {
+    if (text.length === 0 || reg.test(text)) {
+      setCode(text);
+    }
+  }, []);
+
   return (
     <EventLayout
       header={{
@@ -124,7 +132,7 @@ const Name: NextPage<NameProps> = ({ eventId }) => {
             <>
               <CustomInput
                 value={code as string}
-                setValue={setCode}
+                setValue={setAvailableCode}
                 placeholder="초대코드를 적어주세요."
                 avoidSpace={true}
                 error={
