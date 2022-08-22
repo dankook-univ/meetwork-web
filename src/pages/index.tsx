@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import _ from 'lodash';
 
 import { withAuthSSR } from '@/utils/session/withAuth';
 
@@ -12,17 +13,40 @@ import { Event } from '@/domain/event/event';
 import CreateEventButton from '@/components/home/button/CreateEventButton';
 import CreateEventModal from '@/components/home/modal/CreateEventModal';
 import ParticipatingEventItem from '@/components/home/ParticipatingEventItem';
+import Conditional from '@/hocs/Conditional';
 
 const Index: NextPage = () => {
   const router = useRouter();
 
-  const { data } = useSWR('/api/event/list', MeetworkApi.event.list);
+  const [page, setPage] = useState<number>(1);
+  const [eventList, setEventList] = useState<Event[]>([]);
 
-  const events = useMemo<Event[]>(() => data ?? [], [data]);
+  const { data: events } = useSWR(['/api/event/list', page], () =>
+    MeetworkApi.event.list(page),
+  );
+
+  const hasMore = useMemo<boolean>(
+    () => !(events !== undefined && events.length < 10),
+    [events],
+  );
+
+  useEffect(() => {
+    if (events) {
+      setEventList((prev) =>
+        _([...prev, ...events])
+          .unionBy((it) => it.id)
+          .value(),
+      );
+    }
+  }, [events]);
 
   const handleOnCreateEvent = useCallback(async () => {
     await router.replace(router.pathname + '?popup=true');
   }, [router]);
+
+  const handleNext = useCallback(() => {
+    setPage((prev) => prev + 1);
+  }, []);
 
   return (
     <HomeLayout
@@ -39,9 +63,18 @@ const Index: NextPage = () => {
         </header>
 
         <div className="flex flex-1 flex-col">
-          {events.map((event) => (
+          {eventList.map((event) => (
             <ParticipatingEventItem key={event.id} event={event} />
           ))}
+
+          <Conditional condition={hasMore}>
+            <div
+              className="flex w-[calc(100%-40px)] py-[14px] mx-[20px] my-[6px] rounded-[10px] items-center justify-center bg-gray"
+              onClick={handleNext}
+            >
+              <span className="font-[400] text-[14px] text-black">더보기</span>
+            </div>
+          </Conditional>
         </div>
 
         <CreateEventModal />
