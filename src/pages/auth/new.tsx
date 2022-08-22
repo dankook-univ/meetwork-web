@@ -62,7 +62,7 @@ const New: NextPage = () => {
         </div>
 
         <CustomButton
-          style="w-full"
+          style="w-full rounded-[50px]"
           textStyle="text-white"
           label="계속"
           onClick={handleOnClick}

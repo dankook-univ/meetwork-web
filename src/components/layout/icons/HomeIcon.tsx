@@ -5,16 +5,12 @@ const HomeIcon: React.FC = () => {
   const router = useRouter();
 
   const color = useMemo<string>(
-    () =>
-      !router.pathname.startsWith('/notification') &&
-      !router.pathname.startsWith('/me')
-        ? '#9BD1DD'
-        : '#ECECEC',
-    [router?.pathname],
+    () => (router.asPath.split('?')[0].trim() === '/' ? '#9BD1DD' : '#ECECEC'),
+    [router.asPath],
   );
 
-  const handleOnClick = useCallback(() => {
-    router.push('/');
+  const handleOnClick = useCallback(async () => {
+    await router.push('/');
   }, [router]);
 
   return (

@@ -20,5 +20,27 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwind-scrollbar-hide')],
+  safelist: [
+    {
+      pattern: /bg-\w+/,
+    },
+    {
+      pattern: /text-\w+/,
+    },
+    {
+      pattern: /min-\w+/,
+    },
+    {
+      pattern: /rounded-\w+/,
+    },
+    {
+      pattern: /border-\w+/,
+    },
+  ],
+  plugins: [
+    require('tailwind-scrollbar-hide'),
+    require('@tailwindcss/forms')({
+      strategy: 'class',
+    }),
+  ],
 };

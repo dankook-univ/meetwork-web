@@ -1,13 +1,18 @@
 import React from 'react';
+import classNames from 'classnames';
+import Conditional from '@/hocs/Conditional';
 
-interface BasicLayoutProps {
+export interface BasicLayoutProps {
   children: JSX.Element;
   header?: {
     title?: string;
+    subTitle?: string;
+    titleAlign?: 'left' | 'center';
     left?: JSX.Element;
     right?: JSX.Element;
-    color?: 'white' | 'black';
-    textColor?: string;
+    color?: 'white' | 'black' | 'pink';
+    textColor?: 'white' | 'black' | 'pink';
+    style?: React.HTMLAttributes<JSX.IntrinsicElements['div']>['className'];
   };
   container?: {
     style?: React.HTMLAttributes<JSX.IntrinsicElements['section']>['className'];
@@ -24,21 +29,35 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({
   return (
     <div className="flex flex-1 flex-col min-w-screen min-h-screen max-h-screen bg-primary">
       <header
-        className={`flex flex-row items-center justify-between pt-[40px] pb-[25px] px-[16px] bg-${
-          header?.color ?? 'primary'
-        }`}
+        className={classNames(
+          `flex flex-row items-center justify-between pt-[40px] pb-[25px] px-[16px]`,
+          `bg-${header?.color ?? 'primary'}`,
+          header?.style ?? '',
+        )}
       >
-        <section className="flex flex-1 flex-row items-center justify-start">
-          {header?.left}
-        </section>
+        <Conditional condition={header?.titleAlign !== 'left'}>
+          <section className="flex flex-1 flex-row items-center justify-start">
+            {header?.left}
+          </section>
+        </Conditional>
 
-        <section className="flex flex-5 items-center justify-center">
+        <section className="flex flex-col flex-5 items-center justify-center">
           <span
-            className={`font-[700] text-[22px] text-${
-              header?.textColor ?? 'white'
-            }`}
+            className={classNames(
+              `font-[700] text-[22px]`,
+              `text-${header?.textColor ?? 'white'}`,
+            )}
           >
             {header?.title}
+          </span>
+
+          <span
+            className={classNames(
+              `font-[400] text-[14px]`,
+              `text-${header?.textColor ?? 'white'}`,
+            )}
+          >
+            {header?.subTitle}
           </span>
         </section>
 
@@ -48,15 +67,19 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({
       </header>
 
       <div
-        className={`flex flex-1 w-screen overflow-y-auto scrollbar-hide bg-white ${container?.style}`}
+        className={classNames(
+          `flex flex-1 w-screen overflow-y-auto scrollbar-hide bg-white`,
+          `${container?.style}`,
+        )}
       >
         {children}
       </div>
 
       <footer
-        className={`flex flex-row w-screen min-h-[70px] px-[50px] border-t-[3px] border-gray items-center justify-between bg-white ${
-          footer ? '' : 'hidden'
-        }`}
+        className={classNames(
+          `flex flex-row w-screen min-h-[70px] px-[50px] border-t-[3px] border-gray items-center justify-between bg-white`,
+          `${footer ? '' : 'hidden'}`,
+        )}
       >
         {footer}
       </footer>

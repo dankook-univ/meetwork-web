@@ -29,12 +29,13 @@ const Code: NextPage = () => {
 
   useEffect(() => {
     if (code) {
+      setCreateEventState((prev) => ({ ...prev, code }));
       setCodeAvailable(null);
       MeetworkApi.event.checkCode(code).then((res) => {
         setCodeAvailable(!res);
       });
     }
-  }, [code]);
+  }, [code, setCreateEventState]);
 
   const handleBack = useCallback(() => {
     router.back();
@@ -78,7 +79,12 @@ const Code: NextPage = () => {
             초대코드를 만들어주세요.
           </span>
 
-          <CustomInput value={code} setValue={setCode} />
+          <CustomInput
+            value={code}
+            setValue={setCode}
+            avoidSpace={true}
+            error={codeAvailable === false}
+          />
 
           <Conditional condition={code.length === 0 || codeAvailable !== false}>
             <>
@@ -86,6 +92,17 @@ const Code: NextPage = () => {
                 초대코드를 통해 참가할 경우 참가자로 배정되어요!
               </span>
               <span className="font-[400] text-[14px] text-black">{`역할은 추후 '행사>관리>역할'에서 수정해주세요.`}</span>
+            </>
+          </Conditional>
+
+          <Conditional condition={codeAvailable === false}>
+            <>
+              <span className="font-[400] text-[14px] text-pink mt-[8px]">
+                해당 초대코드로 이미 만들어진 공간이 있어요.
+              </span>
+              <span className="font-[400] text-[14px] text-pink">
+                다른 초대코드를 적어주세요.
+              </span>
             </>
           </Conditional>
         </div>
