@@ -12,7 +12,7 @@ const InputMessage: React.FC<InputMessageProps> = ({ eventId, channelId }) => {
 
   const handleOnChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setMessage(event.target.value.trim());
+      setMessage(event.target.value);
     },
     [setMessage],
   );
