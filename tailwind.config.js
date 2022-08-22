@@ -33,6 +33,9 @@ module.exports = {
     {
       pattern: /rounded-\w+/,
     },
+    {
+      pattern: /border-\w+/,
+    },
   ],
   plugins: [
     require('tailwind-scrollbar-hide'),

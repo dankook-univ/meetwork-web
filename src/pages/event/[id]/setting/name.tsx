@@ -28,6 +28,7 @@ const Name: NextPage<NameProps> = ({ eventId }) => {
 
   const [name, setName] = useState<string | null>(null);
   const [code, setCode] = useState<string | null>(null);
+  const [codeAvailable, setCodeAvailable] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (event && me && event.organizer.id !== me.id) {
@@ -45,6 +46,20 @@ const Name: NextPage<NameProps> = ({ eventId }) => {
     }
   }, [event, name, code]);
 
+  useEffect(() => {
+    if (code !== null && code.trim().length > 0) {
+      if (event?.code === code) {
+        setCodeAvailable(true);
+      } else {
+        MeetworkApi.event.checkCode(code).then((res) => {
+          setCodeAvailable(!res);
+        });
+      }
+    } else {
+      setCodeAvailable(false);
+    }
+  }, [code, event?.code]);
+
   const handleBack = useCallback(() => {
     router.back();
   }, [router]);
@@ -55,13 +70,13 @@ const Name: NextPage<NameProps> = ({ eventId }) => {
   );
 
   const handleChange = useCallback(async () => {
-    if (name && code) {
+    if (name && code && codeAvailable) {
       await MeetworkApi.event.update(eventId, { name, code });
       await mutate();
 
       router.back();
     }
-  }, [name, code, eventId, mutate, router]);
+  }, [name, code, codeAvailable, eventId, mutate, router]);
 
   const headerRight = useMemo(
     () => <CheckButton onClick={handleChange} />,
@@ -106,11 +121,32 @@ const Name: NextPage<NameProps> = ({ eventId }) => {
           </span>
 
           <Conditional condition={name !== null}>
-            <CustomInput
-              value={code as string}
-              setValue={setCode}
-              placeholder="초대코드를 적어주세요."
-            />
+            <>
+              <CustomInput
+                value={code as string}
+                setValue={setCode}
+                placeholder="초대코드를 적어주세요."
+                avoidSpace={true}
+                error={
+                  !!code && code?.trim().length > 0 && codeAvailable === false
+                }
+              />
+
+              <Conditional
+                condition={
+                  !!code && code?.trim().length > 0 && codeAvailable === false
+                }
+              >
+                <>
+                  <span className="font-[400] text-[14px] text-pink mt-[8px]">
+                    해당 초대코드로 이미 만들어진 공간이 있어요.
+                  </span>
+                  <span className="font-[400] text-[14px] text-pink">
+                    다른 초대코드를 적어주세요.
+                  </span>
+                </>
+              </Conditional>
+            </>
           </Conditional>
         </div>
       </div>

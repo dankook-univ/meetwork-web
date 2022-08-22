@@ -10,6 +10,7 @@ interface CustomInputProps {
   align?: 'left' | 'center';
   textStyle?: React.HTMLAttributes<JSX.IntrinsicElements['input']>['className'];
   avoidSpace?: boolean;
+  error?: boolean;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -19,6 +20,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   align = 'left',
   textStyle = '',
   avoidSpace = false,
+  error = false,
 }) => {
   const handleOnChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,9 +37,11 @@ const CustomInput: React.FC<CustomInputProps> = ({
   return (
     <input
       className={classNames(
-        `flex w-full h-[44px] border-b-[1px] border-b-lightGray focus:outline-none caret-primary bg-white font-[400] text-[20px] text-black placeholder:text-gray`,
+        `flex w-full h-[44px] border-b-[1px] focus:outline-none caret-primary bg-white font-[400] text-[20px] placeholder:text-gray`,
         'outline-0',
         ` text-${align}`,
+        `text-${error ? 'pink' : 'black'}`,
+        `border-b-${error ? 'pink' : 'lightGray'}`,
         textStyle,
       )}
       type="text"
