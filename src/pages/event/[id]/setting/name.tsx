@@ -22,9 +22,18 @@ const Name: NextPage<NameProps> = ({ eventId }) => {
   const { data: event, mutate } = useSWR(['/api/event', eventId], () =>
     MeetworkApi.event.get(eventId),
   );
+  const { data: me } = useSWR(['/api/event/me', eventId], () =>
+    MeetworkApi.event.getProfile(eventId),
+  );
 
   const [name, setName] = useState<string | null>(null);
   const [code, setCode] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (event && me && event.organizer.id !== me.id) {
+      router.back();
+    }
+  }, [event, me, router]);
 
   useEffect(() => {
     if (event && name === null) {

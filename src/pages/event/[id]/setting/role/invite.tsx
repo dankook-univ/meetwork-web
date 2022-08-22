@@ -1,7 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import useSWR from 'swr';
 
+import { MeetworkApi } from '@/operations';
 import { withAuthSSR } from '@/utils/session/withAuth';
 
 import HeaderBackButton from '@/components/button/HeaderBackButton';
@@ -9,7 +11,6 @@ import EventLayout from '@/components/layout/EventLayout';
 import CustomInput from '@/components/form/CustomInput';
 import PlusIcon from '@/components/icons/PlusIcon';
 import CheckButton from '@/components/button/CheckButton';
-import { MeetworkApi } from '@/operations';
 
 const emailReg = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
@@ -18,10 +19,23 @@ interface InviteProps {
   type: 'admin' | 'general';
 }
 
-const Invite: NextPage<InviteProps> = ({ eventId, type }) => {
+const Invite: NextPage<InviteProps> = ({eventId, type}) => {
   const router = useRouter();
 
+  const {data: event} = useSWR(['/api/event', eventId], () =>
+    MeetworkApi.event.get(eventId),
+  );
+  const {data: me} = useSWR(['/api/event/me', eventId], () =>
+    MeetworkApi.event.getProfile(eventId),
+  );
+
   const [emailList, setEmailList] = useState<string[]>(['']);
+
+  useEffect(() => {
+    if (event && me && event.organizer.id !== me.id) {
+      router.back();
+    }
+  }, [event, me, router]);
 
   const handleChangeEmail = useCallback((index: number) => {
     return (newValue: string) => {
@@ -34,7 +48,7 @@ const Invite: NextPage<InviteProps> = ({ eventId, type }) => {
   const emailForms = useMemo(
     () => (
       <>
-        {Array.from({ length: emailList.length }).map((value, index) => (
+        {Array.from({length: emailList.length}).map((value, index) => (
           <CustomInput
             key={index}
             value={emailList[index]}
@@ -51,7 +65,7 @@ const Invite: NextPage<InviteProps> = ({ eventId, type }) => {
   }, [router]);
 
   const headerLeft = useMemo(
-    () => <HeaderBackButton onClick={handleBack} />,
+    () => <HeaderBackButton onClick={handleBack}/>,
     [handleBack],
   );
 
@@ -70,7 +84,7 @@ const Invite: NextPage<InviteProps> = ({ eventId, type }) => {
   }, [emailList, eventId, router, type]);
 
   const headerRight = useMemo(
-    () => <CheckButton onClick={handleChange} />,
+    () => <CheckButton onClick={handleChange}/>,
     [handleChange],
   );
 
@@ -111,7 +125,7 @@ const Invite: NextPage<InviteProps> = ({ eventId, type }) => {
           onClick={handleAppend}
         >
           <span className="font-[400] text-[18px] text-mint">추가하기</span>
-          <PlusIcon color="#9BD1DD" />
+          <PlusIcon color="#9BD1DD"/>
         </div>
       </div>
     </EventLayout>
@@ -120,7 +134,7 @@ const Invite: NextPage<InviteProps> = ({ eventId, type }) => {
 
 export const getServerSideProps: GetServerSideProps = withAuthSSR(
   async (context: GetServerSidePropsContext) => {
-    const { id, type } = (await context.query) as { id: string; type: string };
+    const {id, type} = (await context.query) as { id: string; type: string };
 
     return {
       props: {

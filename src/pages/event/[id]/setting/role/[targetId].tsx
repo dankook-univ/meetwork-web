@@ -23,10 +23,23 @@ const TargetId: NextPage<TargetIdProps> = ({ eventId, memberId }) => {
 
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
+  const { data: event } = useSWR(['/api/event', eventId], () =>
+    MeetworkApi.event.get(eventId),
+  );
+  const { data: me } = useSWR(['/api/event/me', eventId], () =>
+    MeetworkApi.event.getProfile(eventId),
+  );
+
   const { data: member, mutate: mutateMember } = useSWR(
     ['/api/event/member', eventId, memberId],
     () => MeetworkApi.event.member(eventId, memberId),
   );
+
+  useEffect(() => {
+    if (event && me && event.organizer.id !== me.id) {
+      router.back();
+    }
+  }, [event, me, router]);
 
   useEffect(() => {
     if (member && isAdmin === null) {

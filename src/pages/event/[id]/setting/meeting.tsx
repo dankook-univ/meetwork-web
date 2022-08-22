@@ -22,8 +22,17 @@ const Meeting: NextPage<MeetingProps> = ({ eventId }) => {
   const { data: event, mutate } = useSWR(['/api/event', eventId], () =>
     MeetworkApi.event.get(eventId),
   );
+  const { data: me } = useSWR(['/api/event/me', eventId], () =>
+    MeetworkApi.event.getProfile(eventId),
+  );
 
   const [url, setUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (me && !me.isAdmin) {
+      router.back();
+    }
+  }, [me, router]);
 
   useEffect(() => {
     if (event && url === null) {
