@@ -4,20 +4,18 @@ import { AxiosError } from 'axios';
 import { withSessionRouter } from '@/utils/session/withSession';
 import { fetcher } from '@/config/axios';
 
+export interface ReleaseEventProps {
+  eventId: string;
+  profileId: string;
+}
+
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
-    const { id, page, adminOnly } = (await req.query) as {
-      id: string;
-      page: string;
-      adminOnly?: string;
-    };
-
-    if (req.method === 'GET') {
-      return fetcher({
+    if (req.method === 'POST') {
+      return fetcher<boolean, ReleaseEventProps>({
         req,
-        url: `/api/event/members/${id}?page=${page}${
-          adminOnly !== undefined ? '&adminOnly=' + adminOnly : ''
-        }`,
+        url: `/api/event/release`,
+        payload: await req.body,
       })
         .then((response) => {
           res.status(200).json(response.data);

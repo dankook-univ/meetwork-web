@@ -6,18 +6,15 @@ import { fetcher } from '@/config/axios';
 
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
-    const { id, page, adminOnly } = (await req.query) as {
+    const { id, memberId } = (await req.query) as {
       id: string;
-      page: string;
-      adminOnly?: string;
+      memberId: string;
     };
 
     if (req.method === 'GET') {
       return fetcher({
         req,
-        url: `/api/event/members/${id}?page=${page}${
-          adminOnly !== undefined ? '&adminOnly=' + adminOnly : ''
-        }`,
+        url: `/api/event/member/${id}/${memberId}`,
       })
         .then((response) => {
           res.status(200).json(response.data);

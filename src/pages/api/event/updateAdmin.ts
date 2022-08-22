@@ -4,20 +4,19 @@ import { AxiosError } from 'axios';
 import { withSessionRouter } from '@/utils/session/withSession';
 import { fetcher } from '@/config/axios';
 
+export interface UpdateAdminProps {
+  eventId: string;
+  profileId: string;
+  isAdmin: boolean;
+}
+
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
-    const { id, page, adminOnly } = (await req.query) as {
-      id: string;
-      page: string;
-      adminOnly?: string;
-    };
-
-    if (req.method === 'GET') {
-      return fetcher({
+    if (req.method === 'PATCH') {
+      return fetcher<boolean, UpdateAdminProps>({
         req,
-        url: `/api/event/members/${id}?page=${page}${
-          adminOnly !== undefined ? '&adminOnly=' + adminOnly : ''
-        }`,
+        url: `/api/event/updateAdmin`,
+        payload: await req.body,
       })
         .then((response) => {
           res.status(200).json(response.data);

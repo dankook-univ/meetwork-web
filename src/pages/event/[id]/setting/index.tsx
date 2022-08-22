@@ -17,6 +17,9 @@ interface IndexProps {
 const Index: NextPage<IndexProps> = ({ eventId }) => {
   const router = useRouter();
 
+  const { data: event } = useSWR(['/api/event', eventId], () =>
+    MeetworkApi.event.get(eventId),
+  );
   const { data: me } = useSWR(['/api/event/me', eventId], () =>
     MeetworkApi.event.getProfile(eventId),
   );
@@ -36,6 +39,10 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
 
   const handleChannel = useCallback(async () => {
     await router.push(`${router.asPath}/channel`);
+  }, [router]);
+
+  const handleRole = useCallback(async () => {
+    await router.push(`${router.asPath}/role`);
   }, [router]);
 
   const handleChangeMeetingUrl = useCallback(async () => {
@@ -71,12 +78,17 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
           <span className="font-[400] text-[16px] text-black">채널</span>
         </div>
 
+        <Conditional condition={event?.organizer.id === me?.id}>
+          <div
+            className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray"
+            onClick={handleRole}
+          >
+            <span className="font-[400] text-[16px] text-black">역할</span>
+          </div>
+        </Conditional>
+
         <Conditional condition={me?.isAdmin === true}>
           <>
-            <div className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray">
-              <span className="font-[400] text-[16px] text-black">역할</span>
-            </div>
-
             <div className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray">
               <span className="font-[400] text-[16px] text-black">퀴즈</span>
             </div>
