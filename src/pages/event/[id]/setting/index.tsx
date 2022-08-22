@@ -34,20 +34,34 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
   );
 
   const handleChangeName = useCallback(async () => {
-    await router.push(`${router.asPath}/name`);
-  }, [router]);
+    if (me?.isAdmin) {
+      await router.push(`${router.asPath}/name`);
+    }
+  }, [me?.isAdmin, router]);
 
   const handleChannel = useCallback(async () => {
     await router.push(`${router.asPath}/channel`);
   }, [router]);
 
   const handleRole = useCallback(async () => {
-    await router.push(`${router.asPath}/role`);
-  }, [router]);
+    if (me?.id === event?.organizer.id) {
+      await router.push(`${router.asPath}/role`);
+    }
+  }, [event?.organizer.id, me?.id, router]);
 
   const handleChangeMeetingUrl = useCallback(async () => {
-    await router.push(`${router.asPath}/meeting`);
-  }, [router]);
+    if (me?.isAdmin) {
+      await router.push(`${router.asPath}/meeting`);
+    }
+  }, [me?.isAdmin, router]);
+
+  const handleDelete = useCallback(async () => {
+    if (me?.id === event?.organizer.id) {
+      await MeetworkApi.event.delete(eventId);
+
+      await router.replace('/');
+    }
+  }, [event?.organizer.id, eventId, me?.id, router]);
 
   return (
     <EventLayout
@@ -101,13 +115,16 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
                 Meeting Room 설정
               </span>
             </div>
-
-            <div className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray">
-              <span className="font-[400] text-[16px] text-pink">
-                공간 삭제
-              </span>
-            </div>
           </>
+        </Conditional>
+
+        <Conditional condition={event?.organizer.id === me?.id}>
+          <div
+            className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray"
+            onClick={handleDelete}
+          >
+            <span className="font-[400] text-[16px] text-pink">공간 삭제</span>
+          </div>
         </Conditional>
       </div>
     </EventLayout>
