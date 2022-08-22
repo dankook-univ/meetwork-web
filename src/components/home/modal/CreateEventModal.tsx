@@ -39,6 +39,10 @@ const CreateEventModal: React.FC = () => {
     await router.push('/new/profile');
   }, [router]);
 
+  const handleJoinEvent = useCallback(async () => {
+    await router.push('/join/code');
+  }, [router]);
+
   return (
     <div
       className={`absolute top-0 z-[100] flex flex-col w-screen min-w-screen min-h-screen bg-white ${
@@ -47,12 +51,14 @@ const CreateEventModal: React.FC = () => {
     >
       <BasicLayout header={{ left: headerLeft, color: 'white' }}>
         <div className="flex flex-1 flex-col px-[40px] pb-[100px] items-center justify-center bg-white">
-          <span className="font-[600] text-[16px] text-black mb-[200px]">
+          <span className="font-[600] text-[16px] text-black mb-[18px]">
             새로운 이벤트를 시작해볼까요?
           </span>
 
+          <Image src="/images/question.png" width={250} height={250} alt="" />
+
           <CustomButton
-            style="w-full rounded-[5px] bg-mint mb-[8px]"
+            style="w-full rounded-[5px] bg-mint mt-[38px] mb-[8px]"
             textStyle="font-[400] text-white"
             label="공간 만들기"
             onClick={handleCreateEvent}
@@ -62,6 +68,7 @@ const CreateEventModal: React.FC = () => {
             style="w-full rounded-[5px] border-[1px] border-mint"
             textStyle="font-[400] text-mint"
             label="공간 참가하기"
+            onClick={handleJoinEvent}
           />
         </div>
       </BasicLayout>

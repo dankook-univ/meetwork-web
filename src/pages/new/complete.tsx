@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { withAuthSSR } from '@/utils/session/withAuth';
 import CustomButton from '@/components/button/CustomButton';
 import BasicLayout from '@/components/layout/BasicLayout';
+import Image from 'next/image';
 
 const Complete: NextPage = () => {
   const router = useRouter();
@@ -17,18 +18,21 @@ const Complete: NextPage = () => {
     <BasicLayout
       header={{
         color: 'white',
-        title: '공간 초대코드 만들기',
+        title: '공간 개설 완료',
+        titleAlign: 'left',
         textColor: 'black',
       }}
     >
       <div className="flex flex-1 flex-col px-[22px] py-[50px] justify-between">
-        <div className="flex flex-col items-center">
-          <span className="font-[400] text-[20px] text-black">
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <span className="font-[400] text-[18px] text-black">
             공간을 개설했어요!
           </span>
-          <span className="font-[400] text-[20px] text-black mb-[18px]">
+          <span className="font-[400] text-[18px] text-black mb-[62px]">
             이제 멤버들을 초대해볼까요?
           </span>
+
+          <Image src="/images/work.png" width={250} height={250} alt="" />
         </div>
 
         <CustomButton
