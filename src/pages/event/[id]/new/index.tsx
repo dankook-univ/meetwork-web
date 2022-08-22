@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import ReactSwitch from 'react-switch';
@@ -22,6 +21,7 @@ import CustomInput from '@/components/form/CustomInput';
 import ArrowRightIcon from '@/components/icons/ArrowRightIcon';
 import CustomButton from '@/components/button/CustomButton';
 import ProfileDeleteItem from '@/components/event/new/ProfileDeleteItem';
+import CheckButton from '@/components/button/CheckButton';
 
 interface IndexProps {
   eventId: string;
@@ -84,14 +84,7 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
   );
 
   const headerRight = useMemo(
-    () => (
-      <div
-        className="w-[24px] h-[24px] items-center justify-center"
-        onClick={handleCreate}
-      >
-        <Image src="/icons/check.svg" width={24} height={24} alt="" />
-      </div>
-    ),
+    () => <CheckButton onClick={handleCreate} />,
     [handleCreate],
   );
 

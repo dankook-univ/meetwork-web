@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-
+import _ from 'lodash';
 import { MeetworkApi } from '@/operations';
 import { withAuthSSR } from '@/utils/session/withAuth';
 import { Profile } from '@/domain/user/profile';
@@ -12,7 +12,7 @@ import HeaderBackButton from '@/components/button/HeaderBackButton';
 import Separator from '@/components/event/new/Separator';
 import Conditional from '@/hocs/Conditional';
 import ProfileSelectItem from '@/components/event/new/ProfileSelectItem';
-import _ from 'lodash';
+import CheckButton from '@/components/button/CheckButton';
 
 interface ProfileScreenProps {
   eventId: string;
@@ -37,6 +37,11 @@ const ProfileScreen: NextPage<ProfileScreenProps> = ({ eventId }) => {
 
   const headerLeft = useMemo(
     () => <HeaderBackButton onClick={handleBack} />,
+    [handleBack],
+  );
+
+  const headerRight = useMemo(
+    () => <CheckButton onClick={handleBack} />,
     [handleBack],
   );
 
@@ -66,6 +71,7 @@ const ProfileScreen: NextPage<ProfileScreenProps> = ({ eventId }) => {
         color: 'white',
         textColor: 'black',
         left: headerLeft,
+        right: headerRight,
       }}
       footerShown={false}
     >
@@ -76,7 +82,7 @@ const ProfileScreen: NextPage<ProfileScreenProps> = ({ eventId }) => {
           <ProfileSelectItem key={member.id} profile={member} />
         ))}
 
-        <Conditional condition={!!me && hasMore}>
+        <Conditional condition={!!me && member.length > 0 && hasMore}>
           <div
             className="flex w-[calc(100%-40px)] py-[14px] mx-[20px] my-[6px] rounded-[10px] items-center justify-center bg-gray"
             onClick={handleNextPage}
