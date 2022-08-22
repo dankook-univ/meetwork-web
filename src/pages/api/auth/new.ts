@@ -19,9 +19,6 @@ export default withSessionRouter(
         req,
         url: '/api/auth/new',
         payload: await req.body,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
         credential: false,
       })
         .then(async (response) => {
