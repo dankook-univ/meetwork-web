@@ -16,9 +16,13 @@ import CustomButton from '@/components/button/CustomButton';
 interface NewProps {
   eventId: string;
   boardId: string;
+  postId: string;
 }
 
-const New: NextPage<NewProps> = ({ eventId, boardId }) => {
+const imageReg =
+  /!\[post_image]\(https:\/\/kr.object.ncloudstorage.com\/meetwork\/post\/[a-zA-Z0-9\-]+.(jpeg|png|jpg|gif)\)/g;
+
+const New: NextPage<NewProps> = ({ eventId, boardId, postId }) => {
   const router = useRouter();
 
   const [content, setContent] = useState<string>('');
@@ -30,6 +34,12 @@ const New: NextPage<NewProps> = ({ eventId, boardId }) => {
   const { data: boards } = useSWR(['/api/board/list', eventId], () =>
     MeetworkApi.board.list(eventId),
   );
+  const { data: post, mutate: mutatePost } = useSWR(['/api/post', postId], () =>
+    MeetworkApi.post.get(postId),
+  );
+  const { mutate: mutatePosts } = useSWR(['/api/post/list', eventId, 1], () =>
+    MeetworkApi.post.list(postId),
+  );
 
   const board = useMemo<Board | null>(
     () => boards?.find((it) => it.id === boardId) ?? null,
@@ -37,10 +47,19 @@ const New: NextPage<NewProps> = ({ eventId, boardId }) => {
   );
 
   useEffect(() => {
-    if (board?.adminOnly === true && me?.isAdmin === false) {
+    if (post?.writer.id !== me?.id) {
       router.back();
+    } else {
+      setContent(post?.content.replace(imageReg, '').trim() ?? '');
+      setImages(
+        post?.content
+          .match(imageReg)
+          ?.map((image) =>
+            image.replace('![post_image](', '').replace(')', ''),
+          ) ?? [],
+      );
     }
-  }, [board?.adminOnly, me?.isAdmin, router]);
+  }, [me?.id, post?.content, post?.writer.id, router]);
 
   const handleBack = useCallback(() => {
     router.back();
@@ -52,7 +71,7 @@ const New: NextPage<NewProps> = ({ eventId, boardId }) => {
         <HeaderBackButton onClick={handleBack} />
 
         <header className="flex flex-col ml-[10px]">
-          <span className="font-[400] text-[18px] text-black">글쓰기</span>
+          <span className="font-[400] text-[18px] text-black">수정하기</span>
           <span className="font-[400] text-[14px] text-black">
             {board?.name ?? ''}
           </span>
@@ -64,16 +83,17 @@ const New: NextPage<NewProps> = ({ eventId, boardId }) => {
 
   const handlePost = useCallback(async () => {
     if (content.trim().length > 0) {
-      await MeetworkApi.post.create({
-        boardId,
+      await MeetworkApi.post.update(postId, {
         content: `${content.trim()}\n${images
           .map((image) => `![post_image](${image})`)
           .join('\n')}\n`,
       });
+      await mutatePost();
+      await mutatePosts();
 
       router.back();
     }
-  }, [boardId, content, images, router]);
+  }, [content, images, mutatePost, mutatePosts, postId, router]);
 
   const headerRight = useMemo<JSX.Element>(
     () => (
@@ -169,15 +189,17 @@ const New: NextPage<NewProps> = ({ eventId, boardId }) => {
 
 export const getServerSideProps: GetServerSideProps = withAuthSSR(
   async (context: GetServerSidePropsContext) => {
-    const { id, boardId } = (await context.query) as {
+    const { id, boardId, postId } = (await context.query) as {
       id: string;
       boardId: string;
+      postId: string;
     };
 
     return {
       props: {
         eventId: id,
         boardId,
+        postId,
       },
     };
   },

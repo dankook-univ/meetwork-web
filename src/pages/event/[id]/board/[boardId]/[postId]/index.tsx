@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -14,6 +14,7 @@ import EventLayout from '@/components/layout/EventLayout';
 import Conditional from '@/hocs/Conditional';
 import InputCommentMessage from '@/components/event/InputCommentMessage';
 import CommentItem from '@/components/event/CommentItem';
+import EditPostModal from '@/components/event/modal/EditPostModal';
 
 interface PostProps {
   eventId: string;
@@ -27,6 +28,11 @@ const imageReg =
 const Post: NextPage<PostProps> = ({ eventId, boardId, postId }) => {
   const router = useRouter();
 
+  const [visible, setVisible] = useState<boolean>(false);
+
+  const { data: me } = useSWR(['/api/event/me', eventId], () =>
+    MeetworkApi.event.getProfile(eventId),
+  );
   const { data: event } = useSWR(['/api/event', eventId], () =>
     MeetworkApi.event.get(eventId),
   );
@@ -66,6 +72,29 @@ const Post: NextPage<PostProps> = ({ eventId, boardId, postId }) => {
     [handleBack],
   );
 
+  const handleOpenModal = useCallback(() => {
+    setVisible(true);
+  }, []);
+
+  const headerRight = useMemo<JSX.Element>(
+    () => (
+      <Conditional condition={me?.id === post?.writer.id}>
+        <div
+          className="flex w-[24px] h-[24px] items-center justify-center"
+          onClick={handleOpenModal}
+        >
+          <Image
+            src="/icons/more-horizontal.svg"
+            width={24}
+            height={24}
+            alt=""
+          />
+        </div>
+      </Conditional>
+    ),
+    [handleOpenModal, me?.id, post?.writer.id],
+  );
+
   return (
     <EventLayout
       header={{
@@ -74,6 +103,7 @@ const Post: NextPage<PostProps> = ({ eventId, boardId, postId }) => {
         titleAlign: 'center',
         textColor: 'white',
         left: headerLeft,
+        right: headerRight,
       }}
       footerShown={false}
     >
@@ -110,7 +140,7 @@ const Post: NextPage<PostProps> = ({ eventId, boardId, postId }) => {
             {content}
           </p>
 
-          <div className="flex flex-row w-[calc(100vw-32px)] h-[140px] mt-[16px] items-center overflow-y-auto overflow-x-auto overscroll-x-contain scrollbar-hide">
+          <div className="flex flex-row w-[calc(100vw-32px)] h-[150px] mt-[16px] items-center overflow-y-auto overflow-x-auto overscroll-x-contain scrollbar-hide">
             {images.map((image, index) => (
               <div key={index} className="flex-none mr-[16px]">
                 <Image
@@ -137,6 +167,12 @@ const Post: NextPage<PostProps> = ({ eventId, boardId, postId }) => {
         </div>
 
         <InputCommentMessage postId={postId} />
+        <EditPostModal
+          visible={visible}
+          setVisible={setVisible}
+          boardId={boardId}
+          postId={postId}
+        />
       </div>
     </EventLayout>
   );

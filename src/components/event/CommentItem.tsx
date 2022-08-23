@@ -30,7 +30,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   }, [comment.id, mutate]);
 
   return (
-    <div className="flex flex-col p-[16px]">
+    <div className="flex flex-col p-[16px] border-b-[1px] border-b-gray">
       <header className="flex flex-row mb-[12px] items-center">
         <div className="flex mr-[6px]">
           <Conditional condition={!!comment.writer.profileImage}>

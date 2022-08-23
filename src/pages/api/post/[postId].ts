@@ -6,7 +6,6 @@ import { fetcher } from '@/config/axios';
 import { Post } from '@/domain/post';
 
 export interface UpdatePostProps {
-  title: string;
   content: string;
 }
 
