@@ -27,7 +27,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({
   footer,
 }) => {
   return (
-    <div className="flex flex-1 flex-col min-w-screen min-h-screen max-h-screen bg-primary">
+    <div className="flex flex-1 flex-col min-w-screen min-h-screen max-w-screen max-h-screen bg-primary">
       <header
         className={classNames(
           `flex flex-row items-center justify-between pt-[40px] pb-[25px] px-[16px]`,

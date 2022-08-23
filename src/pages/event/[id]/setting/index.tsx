@@ -74,7 +74,7 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
       footerShown={false}
     >
       <div className="flex flex-1 flex-col border-t-[3px] border-t-gray">
-        <Conditional condition={me?.isAdmin === true}>
+        <Conditional condition={event?.organizer.id === me?.id}>
           <div
             className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray"
             onClick={handleChangeName}
