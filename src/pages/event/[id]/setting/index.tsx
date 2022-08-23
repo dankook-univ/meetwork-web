@@ -3,11 +3,11 @@ import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
+import { MeetworkApi } from '@/operations';
 import { withAuthSSR } from '@/utils/session/withAuth';
 
 import EventLayout from '@/components/layout/EventLayout';
 import HeaderBackButton from '@/components/button/HeaderBackButton';
-import { MeetworkApi } from '@/operations';
 import Conditional from '@/hocs/Conditional';
 
 interface IndexProps {
@@ -22,6 +22,9 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
   );
   const { data: me } = useSWR(['/api/event/me', eventId], () =>
     MeetworkApi.event.getProfile(eventId),
+  );
+  const { mutate } = useSWR(['/api/event/list', 1], () =>
+    MeetworkApi.event.list(1),
   );
 
   const handleBack = useCallback(() => {
@@ -58,10 +61,16 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
   const handleDelete = useCallback(async () => {
     if (me?.id === event?.organizer.id) {
       await MeetworkApi.event.delete(eventId);
+      await mutate();
+
+      await router.replace('/');
+    } else {
+      await MeetworkApi.event.leave(eventId);
+      await mutate();
 
       await router.replace('/');
     }
-  }, [event?.organizer.id, eventId, me?.id, router]);
+  }, [event?.organizer.id, eventId, me?.id, mutate, router]);
 
   return (
     <EventLayout
@@ -118,14 +127,14 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
           </>
         </Conditional>
 
-        <Conditional condition={event?.organizer.id === me?.id}>
-          <div
-            className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray"
-            onClick={handleDelete}
-          >
-            <span className="font-[400] text-[16px] text-pink">공간 삭제</span>
-          </div>
-        </Conditional>
+        <div
+          className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray"
+          onClick={handleDelete}
+        >
+          <span className="font-[400] text-[16px] text-pink">
+            {event?.organizer.id === me?.id ? '공간 삭제' : '공간 나가기'}
+          </span>
+        </div>
       </div>
     </EventLayout>
   );

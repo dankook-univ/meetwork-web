@@ -38,5 +38,18 @@ export default withSessionRouter(
           res.status(error.response?.status ?? 400).json(error.response?.data);
         });
     }
+
+    if (req.method === 'DELETE') {
+      return fetcher<boolean>({
+        req,
+        url: `/api/event/${(req.query as { id: string }).id}`,
+      })
+        .then((response) => {
+          res.status(200).json(response.data);
+        })
+        .catch((error: AxiosError) => {
+          res.status(error.response?.status ?? 400).json(error.response?.data);
+        });
+    }
   },
 );
