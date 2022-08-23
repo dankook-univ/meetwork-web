@@ -13,6 +13,7 @@ import EventLayout from '@/components/layout/EventLayout';
 import HeaderBackButton from '@/components/button/HeaderBackButton';
 import PlusIcon from '@/components/icons/PlusIcon';
 import Conditional from '@/hocs/Conditional';
+import PostItem from '@/components/event/PostItem';
 
 interface IndexProps {
   eventId: string;
@@ -25,6 +26,9 @@ const Index: NextPage<IndexProps> = ({ eventId, boardId }) => {
   const [page, setPage] = useState<number>(1);
   const [postList, setPostList] = useState<Post[]>([]);
 
+  const { data: me } = useSWR(['/api/event/me', eventId], () =>
+    MeetworkApi.event.getProfile(eventId),
+  );
   const { data: event } = useSWR(['/api/event', eventId], () =>
     MeetworkApi.event.get(eventId),
   );
@@ -70,14 +74,21 @@ const Index: NextPage<IndexProps> = ({ eventId, boardId }) => {
 
   const headerRight = useMemo<JSX.Element>(
     () => (
-      <div
-        className="w-[24px] h-[24px] items-center justify-center"
-        onClick={handleCreate}
+      <Conditional
+        condition={
+          board?.adminOnly === false ||
+          (board?.adminOnly === true && me?.isAdmin === true)
+        }
       >
-        <PlusIcon color="#FCFCFC" />
-      </div>
+        <div
+          className="w-[24px] h-[24px] items-center justify-center"
+          onClick={handleCreate}
+        >
+          <PlusIcon color="#FCFCFC" />
+        </div>
+      </Conditional>
     ),
-    [handleCreate],
+    [board?.adminOnly, handleCreate, me?.isAdmin],
   );
 
   const handleNextPage = useCallback(() => {
@@ -96,6 +107,10 @@ const Index: NextPage<IndexProps> = ({ eventId, boardId }) => {
       }}
     >
       <div className="flex flex-1 flex-col">
+        {postList.map((post) => (
+          <PostItem key={post.id} post={post} />
+        ))}
+
         <Conditional condition={postList.length > 0 && hasMore}>
           <div
             className="flex w-[calc(100%-40px)] py-[14px] mx-[20px] my-[6px] rounded-[10px] items-center justify-center bg-gray"

@@ -16,7 +16,7 @@ import { ChatMessage } from '@/domain/chat/chat-message';
 
 import EventLayout from '@/components/layout/EventLayout';
 import HeaderBackButton from '@/components/button/HeaderBackButton';
-import InputMessage from '@/components/event/InputMessage';
+import InputChatMessage from '@/components/event/InputChatMessage';
 import MessageItem from '@/components/event/MessageItem';
 
 interface ChannelProps {
@@ -116,7 +116,7 @@ const Channel: NextPage<ChannelProps> = ({
         </div>
 
         <div className="bottom-[-74px] h-0" ref={messageRef} />
-        <InputMessage eventId={eventId} channelId={channelId} />
+        <InputChatMessage eventId={eventId} channelId={channelId} />
       </div>
     </EventLayout>
   );

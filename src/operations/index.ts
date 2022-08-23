@@ -1,6 +1,7 @@
 import AuthApi from '@/operations/auth';
 import BoardApi from '@/operations/board';
 import ChatApi from '@/operations/chat';
+import CommentApi from '@/operations/comment';
 import EventApi from '@/operations/event';
 import FileApi from '@/operations/file';
 import InvitationApi from '@/operations/invitation';
@@ -12,6 +13,7 @@ export const MeetworkApi = {
   auth: AuthApi,
   board: BoardApi,
   chat: ChatApi,
+  comment: CommentApi,
   event: EventApi,
   file: FileApi,
   invitation: InvitationApi,

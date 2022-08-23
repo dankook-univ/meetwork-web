@@ -6,7 +6,6 @@ export const uploads = (images: (File | Blob)[]): Promise<string[]> => {
   const form = new FormData();
 
   images.forEach((image) => {
-    console.log(image);
     form.append('images', image);
   });
 

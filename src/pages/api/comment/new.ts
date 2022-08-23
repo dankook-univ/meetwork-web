@@ -3,21 +3,20 @@ import { AxiosError } from 'axios';
 
 import { withSessionRouter } from '@/utils/session/withSession';
 import { fetcher } from '@/config/axios';
-import { getParsedForm } from '@/utils/form/parsedForm';
+import { Comment } from '@/domain/post/comment';
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+export interface CreateCommentProps {
+  postId: string;
+  content: string;
+}
 
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
-      return fetcher({
+      return fetcher<Comment, CreateCommentProps>({
         req,
-        url: `/api/file/uploads`,
-        payload: await getParsedForm(req),
+        url: `/api/comment/new`,
+        payload: await req.body,
       })
         .then((response) => {
           res.status(200).json(response.data);
