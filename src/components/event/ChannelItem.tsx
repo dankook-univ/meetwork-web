@@ -22,7 +22,7 @@ const ChannelItem: React.FC<ChannelItemProps> = ({
       const { id } = router.query as { id: string };
 
       if (onClick) {
-        onClick(id, channel.id);
+        await onClick(id, channel.id);
       }
 
       await router.push(`/event/${id}/channel/${channel.id}`);

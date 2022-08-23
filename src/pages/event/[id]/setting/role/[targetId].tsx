@@ -29,7 +29,6 @@ const TargetId: NextPage<TargetIdProps> = ({ eventId, memberId }) => {
   const { data: me } = useSWR(['/api/event/me', eventId], () =>
     MeetworkApi.event.getProfile(eventId),
   );
-
   const { data: member, mutate: mutateMember } = useSWR(
     ['/api/event/member', eventId, memberId],
     () => MeetworkApi.event.member(eventId, memberId),
@@ -89,6 +88,25 @@ const TargetId: NextPage<TargetIdProps> = ({ eventId, memberId }) => {
     setIsAdmin(isAdmin);
   }, []);
 
+  const handleRelease = useCallback(async () => {
+    if (member !== undefined) {
+      await MeetworkApi.event.release({ eventId, profileId: memberId });
+      if (member?.isAdmin) {
+        await mutate(
+          ['/api/event/members', eventId, 1, 'admin'],
+          (prev: Profile[]) => prev.filter((it) => it.id !== memberId),
+        );
+      } else {
+        await mutate(
+          ['/api/event/members', eventId, 1, 'general'],
+          (prev: Profile[]) => prev.filter((it) => it.id !== memberId),
+        );
+      }
+
+      router.back();
+    }
+  }, [eventId, member, memberId, mutate, router]);
+
   return (
     <EventLayout
       header={{
@@ -134,7 +152,10 @@ const TargetId: NextPage<TargetIdProps> = ({ eventId, memberId }) => {
             <span className="font-[400] text-[14px] text-black">방출하기</span>
           </header>
 
-          <div className="flex flex-row px-[22px] py-[16px] border-b-[1px] border-b-gray items-center">
+          <div
+            className="flex flex-row px-[22px] py-[16px] border-b-[1px] border-b-gray items-center"
+            onClick={handleRelease}
+          >
             <span className="font-[400] font-[16px] text-pink">방출하기</span>
           </div>
         </section>

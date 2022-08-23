@@ -1,5 +1,6 @@
 import { checkCode } from '@/operations/event/checkCode';
 import { create } from '@/operations/event/create';
+import { deleteEvent } from '@/operations/event/delete';
 import { get } from '@/operations/event/get';
 import { getProfile } from '@/operations/event/getProfile';
 import { join } from '@/operations/event/join';
@@ -14,6 +15,7 @@ import { updateAdmin } from '@/operations/event/updateAdmin';
 const EventApi = {
   checkCode,
   create,
+  delete: deleteEvent,
   get,
   getProfile,
   join,
@@ -21,7 +23,7 @@ const EventApi = {
   members,
   list,
   release,
-  delete: secession,
+  leave: secession,
   update,
   updateAdmin,
 };

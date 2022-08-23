@@ -67,7 +67,7 @@ const Code: NextPage = () => {
 
       await router.push('/new/complete');
     });
-  }, [code, setCreateEventState, createEvent, router]);
+  }, [createEvent, code, setCreateEventState, router]);
 
   return (
     <BasicLayout

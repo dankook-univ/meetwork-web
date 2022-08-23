@@ -31,10 +31,15 @@ const Index: NextPage = () => {
   );
 
   useEffect(() => {
+    setPage(1);
+    setEventList([]);
+  }, []);
+
+  useEffect(() => {
     if (events) {
       setEventList((prev) =>
         _([...prev, ...events])
-          .unionBy((it) => it.id)
+          .uniqBy((it) => it.id)
           .value(),
       );
     }

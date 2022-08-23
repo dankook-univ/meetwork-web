@@ -12,6 +12,7 @@ import Conditional from '@/hocs/Conditional';
 import HeaderBackButton from '@/components/button/HeaderBackButton';
 import CustomInput from '@/components/form/CustomInput';
 import CustomButton from '@/components/button/CustomButton';
+import CameraIcon from '@/components/icons/CameraIcon';
 
 const Profile: NextPage = () => {
   const router = useRouter();
@@ -90,7 +91,7 @@ const Profile: NextPage = () => {
           <label htmlFor="profile-image">
             <Conditional condition={imagePath === null}>
               <div className="flex w-[132px] h-[132px] rounded-[100%] shadow-[0_0_4px_rgba(0,0,0,0.1)] items-center justify-center bg-primary">
-                <Image src="/icons/camera.svg" width={24} height={24} alt="" />
+                <CameraIcon color="#FCFCFC" />
               </div>
             </Conditional>
 

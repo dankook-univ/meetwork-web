@@ -3,19 +3,20 @@ import { AxiosError } from 'axios';
 
 import { withSessionRouter } from '@/utils/session/withSession';
 import { fetcher } from '@/config/axios';
+import { Post } from '@/domain/post';
 
-export interface UpdateEventProps {
-  name?: string;
-  code?: string;
-  meetingUrl?: string;
+export interface UpdatePostProps {
+  content: string;
 }
 
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
+    const { postId } = (await req.query) as { postId: string };
+
     if (req.method === 'GET') {
-      return fetcher<Event>({
+      return fetcher<Post>({
         req,
-        url: `/api/event/${(req.query as { id: string }).id}`,
+        url: `/api/post/${postId}`,
       })
         .then((response) => {
           res.status(200).json(response.data);
@@ -26,9 +27,9 @@ export default withSessionRouter(
     }
 
     if (req.method === 'PATCH') {
-      return fetcher<Event, UpdateEventProps>({
+      return fetcher<Post, UpdatePostProps>({
         req,
-        url: `/api/event/${(req.query as { id: string }).id}`,
+        url: `/api/post/${postId}`,
         payload: await req.body,
       })
         .then((response) => {
@@ -42,7 +43,7 @@ export default withSessionRouter(
     if (req.method === 'DELETE') {
       return fetcher<boolean>({
         req,
-        url: `/api/event/${(req.query as { id: string }).id}`,
+        url: `/api/post/${postId}`,
       })
         .then((response) => {
           res.status(200).json(response.data);

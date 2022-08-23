@@ -3,33 +3,22 @@ import { AxiosError } from 'axios';
 
 import { withSessionRouter } from '@/utils/session/withSession';
 import { fetcher } from '@/config/axios';
+import { Comment } from '@/domain/post/comment';
 
-export interface UpdateEventProps {
-  name?: string;
-  code?: string;
-  meetingUrl?: string;
+export interface UpdateCommentProps {
+  commentId: string;
+  postId: string;
+  content: string;
 }
 
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
-    if (req.method === 'GET') {
-      return fetcher<Event>({
-        req,
-        url: `/api/event/${(req.query as { id: string }).id}`,
-      })
-        .then((response) => {
-          res.status(200).json(response.data);
-        })
-        .catch((error: AxiosError) => {
-          res.status(error.response?.status ?? 400).json(error.response?.data);
-        });
-    }
+    const { commentId } = (await req.query) as { commentId: string };
 
     if (req.method === 'PATCH') {
-      return fetcher<Event, UpdateEventProps>({
+      return fetcher<Comment, UpdateCommentProps>({
         req,
-        url: `/api/event/${(req.query as { id: string }).id}`,
-        payload: await req.body,
+        url: `/api/comment/${commentId}`,
       })
         .then((response) => {
           res.status(200).json(response.data);
@@ -42,7 +31,7 @@ export default withSessionRouter(
     if (req.method === 'DELETE') {
       return fetcher<boolean>({
         req,
-        url: `/api/event/${(req.query as { id: string }).id}`,
+        url: `/api/comment/${commentId}`,
       })
         .then((response) => {
           res.status(200).json(response.data);

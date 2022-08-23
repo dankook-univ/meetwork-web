@@ -1,14 +1,21 @@
 import React, { useCallback, useState } from 'react';
 import Image from 'next/image';
+import useSWR from 'swr';
+
 import { MeetworkApi } from '@/operations';
 
-interface InputMessageProps {
-  eventId: string;
-  channelId: string;
+interface InputCommentMessageProps {
+  postId: string;
 }
 
-const InputMessage: React.FC<InputMessageProps> = ({ eventId, channelId }) => {
+const InputCommentMessage: React.FC<InputCommentMessageProps> = ({
+  postId,
+}) => {
   const [message, setMessage] = useState<string>('');
+
+  const { mutate } = useSWR(['/api/post', postId], () =>
+    MeetworkApi.post.get(postId),
+  );
 
   const handleOnChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,16 +25,17 @@ const InputMessage: React.FC<InputMessageProps> = ({ eventId, channelId }) => {
   );
 
   const handleOnSubmit = useCallback(async () => {
-    await MeetworkApi.chat.sendMessage(eventId, channelId, { message });
+    await MeetworkApi.comment.create({ postId, content: message });
+    await mutate();
 
     setMessage('');
-  }, [eventId, channelId, message, setMessage]);
+  }, [postId, message, mutate]);
 
   return (
     <div className="sticky bottom-0 flex flex-row w-screen min-h-[74px] px-[24px] rounded-t-[15px] border-t-[1px] border-t-lightGray items-center justify-between bg-white">
       <input
         className="flex flex-1 bg-transparent focus:outline-none caret-pink font-normal text-[14px] text-black placeholder:font-normal placeholder:font-[14px] placeholder:text-gray mr-[8px]"
-        placeholder="메시지 보내기"
+        placeholder="댓글 작성하기"
         value={message}
         onChange={handleOnChange}
       />
@@ -42,4 +50,4 @@ const InputMessage: React.FC<InputMessageProps> = ({ eventId, channelId }) => {
   );
 };
 
-export default InputMessage;
+export default InputCommentMessage;

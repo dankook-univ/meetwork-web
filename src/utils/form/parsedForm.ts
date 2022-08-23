@@ -10,7 +10,7 @@ interface ParsedFormType<T = { [key: string]: any }> {
 
 export const getParsedForm = async (req: NextApiRequest): Promise<FormData> => {
   const parsed: ParsedFormType = await new Promise((resolve, reject) => {
-    const form = new IncomingForm();
+    const form = new IncomingForm({ multiples: true });
 
     form.parse(req, (err, fields, files) => {
       if (err) return reject(err);
@@ -25,9 +25,17 @@ export const getParsedForm = async (req: NextApiRequest): Promise<FormData> => {
   });
 
   Object.entries(parsed.files).map(([key, value]) => {
-    form.append(key, fs.createReadStream((value as File)?.filepath), {
-      filename: (value as File)?.originalFilename ?? '',
-    });
+    if (!Array.isArray(value)) {
+      form.append(key, fs.createReadStream((value as File)?.filepath), {
+        filename: (value as File)?.originalFilename ?? '',
+      });
+    } else {
+      (value as File[]).forEach((file) => {
+        form.append(key, fs.createReadStream((file as File)?.filepath), {
+          filename: (file as File)?.originalFilename ?? '',
+        });
+      });
+    }
   });
 
   return form;
