@@ -111,20 +111,14 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
         </Conditional>
 
         <Conditional condition={me?.isAdmin === true}>
-          <>
-            <div className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray">
-              <span className="font-[400] text-[16px] text-black">퀴즈</span>
-            </div>
-
-            <div
-              className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray"
-              onClick={handleChangeMeetingUrl}
-            >
-              <span className="font-[400] text-[16px] text-black">
-                Meeting Room 설정
-              </span>
-            </div>
-          </>
+          <div
+            className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray"
+            onClick={handleChangeMeetingUrl}
+          >
+            <span className="font-[400] text-[16px] text-black">
+              Meeting Room 설정
+            </span>
+          </div>
         </Conditional>
 
         <div
