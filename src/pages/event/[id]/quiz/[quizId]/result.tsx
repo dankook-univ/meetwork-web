@@ -191,12 +191,9 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
             className={classNames(
               'flex flex-col pb-[22px] rounded-tl-[20px] rounded-tr-[20px] shadow-[0_-2px_8px_rgba(0,0,0,0.3)] items-center bg-white',
               `${open ? '' : 'px-[40px]'}`,
+              `${open ? 'h-[100%]' : 'auto'}`,
               `${open ? 'pt-[20px]' : 'pt-[36px]'}`,
-              `${open ? 'h-[100%]' : ''}`,
             )}
-            animate={{
-              height: open ? '100%' : 'auto',
-            }}
             transition={{ type: 'spring' }}
           >
             <div className="flex flex-row w-full px-[18px] items-center justify-between">
