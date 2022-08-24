@@ -54,6 +54,10 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
     await router.push(`/event/${eventId}/setting`);
   }, [eventId, router]);
 
+  const handleQuiz = useCallback(async () => {
+    await router.push(`/event/${eventId}/quiz`);
+  }, [eventId, router]);
+
   return (
     <EventLayout
       header={{
@@ -113,7 +117,10 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
           </a>
         </Conditional>
 
-        <div className="flex flex-row px-[16px] py-[14px] border-y-[1px] border-y-gray items-center justify-between">
+        <div
+          className="flex flex-row px-[16px] py-[14px] border-y-[1px] border-y-gray items-center justify-between"
+          onClick={handleQuiz}
+        >
           <span className="font-[600] text-[16px] text-black">퀴즈</span>
 
           <Image src="/icons/chevron-right.svg" width={24} height={24} alt="" />
