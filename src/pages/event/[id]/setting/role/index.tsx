@@ -18,7 +18,7 @@ interface IndexProps {
   eventId: string;
 }
 
-const Index: NextPage<IndexProps> = ({eventId}) => {
+const Index: NextPage<IndexProps> = ({ eventId }) => {
   const router = useRouter();
 
   const [adminList, setAdminList] = useState<Profile[]>([]);
@@ -26,20 +26,20 @@ const Index: NextPage<IndexProps> = ({eventId}) => {
   const [adminPage, setAdminPage] = useState<number>(1);
   const [generalPage, setGeneralPage] = useState<number>(1);
 
-  const {data: event} = useSWR(['/api/event', eventId], () =>
+  const { data: event } = useSWR(['/api/event', eventId], () =>
     MeetworkApi.event.get(eventId),
   );
-  const {data: me} = useSWR(['/api/event/me', eventId], () =>
+  const { data: me } = useSWR(['/api/event/me', eventId], () =>
     MeetworkApi.event.getProfile(eventId),
   );
-  const {data: admin} = useSWR(
+  const { data: admin } = useSWR(
     ['/api/event/members', eventId, adminPage, 'admin'],
     () => MeetworkApi.event.members(eventId, adminPage, true),
     {
       revalidateOnMount: true,
     },
   );
-  const {data: general} = useSWR(
+  const { data: general } = useSWR(
     ['/api/event/members', eventId, generalPage, 'general'],
     () => MeetworkApi.event.members(eventId, generalPage, false),
     {
@@ -88,7 +88,7 @@ const Index: NextPage<IndexProps> = ({eventId}) => {
   }, [router]);
 
   const headerLeft = useMemo(
-    () => <HeaderBackButton onClick={handleBack}/>,
+    () => <HeaderBackButton onClick={handleBack} />,
     [handleBack],
   );
 
@@ -119,7 +119,7 @@ const Index: NextPage<IndexProps> = ({eventId}) => {
   return (
     <EventLayout
       header={{
-        title: '역할',
+        title: '멤버',
         textColor: 'black',
         color: 'white',
         left: headerLeft,
@@ -159,7 +159,7 @@ const Index: NextPage<IndexProps> = ({eventId}) => {
           >
             <span className="font-[400] text-[16px] text-mint">초대하기</span>
 
-            <PlusIcon color="#9BD1DD"/>
+            <PlusIcon color="#9BD1DD" />
           </div>
 
           <Conditional condition={hasMoreAdmin}>
@@ -202,7 +202,7 @@ const Index: NextPage<IndexProps> = ({eventId}) => {
           >
             <span className="font-[400] text-[16px] text-mint">초대하기</span>
 
-            <PlusIcon color="#9BD1DD"/>
+            <PlusIcon color="#9BD1DD" />
           </div>
 
           <Conditional condition={hasMoreGeneral}>
@@ -221,7 +221,7 @@ const Index: NextPage<IndexProps> = ({eventId}) => {
 
 export const getServerSideProps: GetServerSideProps = withAuthSSR(
   async (context: GetServerSidePropsContext) => {
-    const {id} = (await context.query) as { id: string };
+    const { id } = (await context.query) as { id: string };
 
     return {
       props: {

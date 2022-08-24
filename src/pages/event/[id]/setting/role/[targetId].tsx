@@ -110,7 +110,7 @@ const TargetId: NextPage<TargetIdProps> = ({ eventId, memberId }) => {
   return (
     <EventLayout
       header={{
-        title: '역할',
+        title: '멤버',
         textColor: 'black',
         color: 'white',
         left: headerLeft,

@@ -106,7 +106,7 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
             className="flex px-[22px] py-[16px] border-b-[1px] border-b-gray"
             onClick={handleRole}
           >
-            <span className="font-[400] text-[16px] text-black">역할</span>
+            <span className="font-[400] text-[16px] text-black">멤버</span>
           </div>
         </Conditional>
 
