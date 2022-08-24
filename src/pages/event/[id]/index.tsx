@@ -101,7 +101,11 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
         <Conditional
           condition={!!event?.meetingCode && event?.meetingCode.length > 0}
         >
-          <a href={event?.meetingCode} target="_blank" rel="noreferrer">
+          <a
+            href={`https://meet.google.com/${event?.meetingCode}`}
+            target="_blank"
+            rel="noreferrer"
+          >
             <div className="flex flex-row px-[16px] py-[14px] border-t-[1px] border-t-gray items-center justify-between">
               <span className="font-[600] text-[16px] text-black">
                 Meeting Room
