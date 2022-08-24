@@ -59,7 +59,7 @@ const Code: NextPage = () => {
       setCreateEventState({
         name: '',
         code: '',
-        meetingUrl: null,
+        meetingCode: null,
         organizerNickname: '',
         organizerBio: '',
         organizerProfileImage: null,

@@ -95,6 +95,7 @@ const Name: NextPage<NameProps> = ({ eventId }) => {
     <EventLayout
       header={{
         title: '공간명 변경',
+        titleStyle: 'font-[600] text-[20px]',
         textColor: 'black',
         color: 'white',
         left: headerLeft,
@@ -104,10 +105,10 @@ const Name: NextPage<NameProps> = ({ eventId }) => {
     >
       <div className="flex flex-1 flex-col px-[20px] py-[24px] border-t-[3px] border-t-gray">
         <div className="flex flex-col mb-[65px]">
-          <span className="font-[400] text-[22px] text-black">
+          <span className="font-[400] text-[20px] text-black">
             바꾸고 싶은 공간명으로
           </span>
-          <span className="font-[400] text-[22px] text-black mb-[18px]">
+          <span className="font-[400] text-[20px] text-black mb-[18px]">
             다시 적어주세요.
           </span>
 
@@ -116,15 +117,16 @@ const Name: NextPage<NameProps> = ({ eventId }) => {
               value={name as string}
               setValue={setName}
               placeholder="공간명을 적어주세요."
+              textStyle="font-[400] text-[18px]"
             />
           </Conditional>
         </div>
 
         <div className="flex flex-col mb-[65px]">
-          <span className="font-[400] text-[22px] text-black">
+          <span className="font-[400] text-[20px] text-black">
             바꾸고 싶은 초대코드로
           </span>
-          <span className="font-[400] text-[22px] text-black mb-[18px]">
+          <span className="font-[400] text-[20px] text-black mb-[18px]">
             다시 적어주세요.
           </span>
 
@@ -134,6 +136,7 @@ const Name: NextPage<NameProps> = ({ eventId }) => {
                 value={code as string}
                 setValue={setAvailableCode}
                 placeholder="초대코드를 적어주세요."
+                textStyle="font-[400] text-[18px]"
                 avoidSpace={true}
                 error={
                   !!code && code?.trim().length > 0 && codeAvailable === false

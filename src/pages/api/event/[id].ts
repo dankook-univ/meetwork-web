@@ -7,7 +7,7 @@ import { fetcher } from '@/config/axios';
 export interface UpdateEventProps {
   name?: string;
   code?: string;
-  meetingUrl?: string;
+  meetingCode?: string;
 }
 
 export default withSessionRouter(
