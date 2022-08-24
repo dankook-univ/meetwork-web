@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import _ from 'lodash';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -19,16 +20,18 @@ interface ResultProps {
   quizId: string;
 }
 
-const Result: NextPage<ResultProps> = ({ quizId }) => {
+const Result: NextPage<ResultProps> = ({quizId}) => {
+  const router = useRouter();
+
   const [open, setOpen] = useState<boolean>(false);
 
-  const { data: result } = useSWR(['/api/quiz/result', quizId], () =>
+  const {data: result} = useSWR(['/api/quiz/result', quizId], () =>
     MeetworkApi.quiz.result(quizId),
   );
-  const { data: me } = useSWR(['/api/quiz/result/me', quizId], () =>
+  const {data: me} = useSWR(['/api/quiz/result/me', quizId], () =>
     MeetworkApi.quiz.me(quizId),
   );
-  const { data: count } = useSWR(['/api/quiz/count', quizId], () =>
+  const {data: count} = useSWR(['/api/quiz/count', quizId], () =>
     MeetworkApi.quiz.count(quizId),
   );
 
@@ -38,11 +41,15 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
         .orderBy((it) => it.count, 'desc')
         .groupBy((it) => it.count)
         .values()
-        .map((it, index) => it.map((result) => ({ index: index + 1, result })))
+        .map((it, index) => it.map((result) => ({index: index + 1, result})))
         .flatten()
         .value() ?? [],
     [result],
   );
+
+  const handleBack = useCallback(() => {
+    router.back()
+  }, [router])
 
   const handleOpen = useCallback(() => {
     setOpen((prev) => !prev);
@@ -68,9 +75,9 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
             <motion.section
               className="flex flex-1 flex-row items-end justify-center"
               key="top"
-              initial={{ height: 0 }}
-              animate={{ height: 'auto' }}
-              exit={{ height: 0 }}
+              initial={{height: 0}}
+              animate={{height: 'auto'}}
+              exit={{height: 0}}
             >
               <div
                 className={classNames(
@@ -102,7 +109,7 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
                     <Conditional
                       condition={!scoreList.at(1)?.result.profile.profileImage}
                     >
-                      <div className="flex w-[60px] h-[60px] rounded-[100%] bg-white" />
+                      <div className="flex w-[60px] h-[60px] rounded-[100%] bg-white"/>
                     </Conditional>
 
                     <span className="font-[600] text-[14px] text-black mt-[6px]">
@@ -137,7 +144,7 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
                 <Conditional
                   condition={!scoreList.at(0)?.result.profile.profileImage}
                 >
-                  <div className="flex w-[60px] h-[60px] rounded-[100%] bg-white" />
+                  <div className="flex w-[60px] h-[60px] rounded-[100%] bg-white"/>
                 </Conditional>
 
                 <span className="font-[600] text-[14px] text-black mt-[6px]">
@@ -175,7 +182,7 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
                     <Conditional
                       condition={!scoreList.at(2)?.result.profile.profileImage}
                     >
-                      <div className="flex w-[60px] h-[60px] rounded-[100%] bg-white" />
+                      <div className="flex w-[60px] h-[60px] rounded-[100%] bg-white"/>
                     </Conditional>
 
                     <span className="font-[600] text-[14px] text-black mt-[6px]">
@@ -194,10 +201,10 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
               `${open ? 'h-[100%]' : 'auto'}`,
               `${open ? 'pt-[20px]' : 'pt-[36px]'}`,
             )}
-            transition={{ type: 'spring' }}
+            transition={{type: 'spring'}}
           >
             <div className="flex flex-row w-full px-[18px] items-center justify-between">
-              <div className="flex w-[24px] h-[24px]" />
+              <div className="flex w-[24px] h-[24px]"/>
               <span className="font-[600] text-[20px] text-black">
                 {scoreList.find((it) => it.result.id === me?.id)?.index}위
               </span>
@@ -215,7 +222,8 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
               </div>
             </div>
 
-            <div className="flex w-[70px] h-[70px] rounded-[100%] mt-[10px] mb-[20px] items-center justify-center shadow-[0_0_4px_rgba(0,0,0,0.25)]">
+            <div
+              className="flex w-[70px] h-[70px] rounded-[100%] mt-[10px] mb-[20px] items-center justify-center shadow-[0_0_4px_rgba(0,0,0,0.25)]">
               <Conditional condition={!!me?.profile.profileImage}>
                 <Image
                   className="rounded-[100%] object-cover"
@@ -227,7 +235,7 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
               </Conditional>
 
               <Conditional condition={!me?.profile.profileImage}>
-                <div className="flex w-[70px] h-[70px] rounded-[100%] bg-gray" />
+                <div className="flex w-[70px] h-[70px] rounded-[100%] bg-gray"/>
               </Conditional>
             </div>
 
@@ -251,6 +259,7 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
                   label="확인"
                   style="w-full py-[16px] rounded-[5px] bg-mint mt-[16px] mb-[10px]"
                   textStyle="font-[400] font-[16px] text-white"
+                  onClick={handleBack}
                 />
 
                 <span
@@ -274,7 +283,8 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
                     key={score.result.id}
                     className="flex w-screen px-[26px] py-[16px] border-b-[1px] border-b-gray"
                   >
-                    <span className="font-[400] text-[16px] text-black">{`${score.index}위. ${score.result.profile.nickname}`}</span>
+                    <span
+                      className="font-[400] text-[16px] text-black">{`${score.index}위. ${score.result.profile.nickname}`}</span>
                   </div>
                 ))}
               </div>
@@ -288,7 +298,7 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
 
 export const getServerSideProps: GetServerSideProps = withAuthSSR(
   async (context: GetServerSidePropsContext) => {
-    const { id, quizId } = (await context.query) as {
+    const {id, quizId} = (await context.query) as {
       id: string;
       quizId: string;
     };
