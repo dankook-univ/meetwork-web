@@ -62,11 +62,17 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
         if (me?.isAdmin === true) {
           await router.push(`/event/${eventId}/quiz/${quizId}/edit`);
         } else if (me?.isAdmin === false) {
-          await router.push(`/event/${eventId}/quiz/${quizId}`);
+          if (quiz?.find((it) => it.id === quizId)?.isFinished === true) {
+            await router.push(`/event/${eventId}/quiz/${quizId}/result`);
+          } else if (
+            quiz?.find((it) => it.id === quizId)?.isFinished === false
+          ) {
+            await router.push(`/event/${eventId}/quiz/${quizId}`);
+          }
         }
       };
     },
-    [eventId, me?.isAdmin, router],
+    [eventId, me?.isAdmin, quiz, router],
   );
 
   return (

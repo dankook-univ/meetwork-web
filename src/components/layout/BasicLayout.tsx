@@ -10,9 +10,12 @@ export interface BasicLayoutProps {
     titleAlign?: 'left' | 'center';
     left?: JSX.Element;
     right?: JSX.Element;
-    color?: 'white' | 'black' | 'pink';
+    color?: 'white' | 'black' | 'pink' | 'transparent';
     textColor?: 'white' | 'black' | 'pink';
     style?: React.HTMLAttributes<JSX.IntrinsicElements['div']>['className'];
+    titleStyle?: React.HTMLAttributes<
+      JSX.IntrinsicElements['span']
+    >['className'];
   };
   container?: {
     style?: React.HTMLAttributes<JSX.IntrinsicElements['section']>['className'];
@@ -46,6 +49,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = ({
             className={classNames(
               `font-[700] text-[22px]`,
               `text-${header?.textColor ?? 'white'}`,
+              `${header?.titleStyle ?? ''}`,
             )}
           >
             {header?.title}

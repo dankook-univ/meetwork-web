@@ -1,4 +1,5 @@
 import { check } from '@/operations/quiz/check';
+import { count } from '@/operations/quiz/count';
 import { create } from '@/operations/quiz/create';
 import { deleteQuiz } from '@/operations/quiz/delete';
 import { get } from '@/operations/quiz/get';
@@ -10,6 +11,7 @@ import { update } from '@/operations/quiz/update';
 
 const QuizApi = {
   check,
+  count,
   create,
   delete: deleteQuiz,
   get,

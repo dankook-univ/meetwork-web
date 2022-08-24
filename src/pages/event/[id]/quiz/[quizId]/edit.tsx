@@ -82,8 +82,10 @@ const Edit: NextPage<EditProps> = ({ eventId, quizId }) => {
 
       await mutate();
       await mutateQuizList();
+
+      router.back();
     }
-  }, [mutate, mutateQuizList, quiz, quizId, quizList, title]);
+  }, [mutate, mutateQuizList, quiz, quizId, quizList, router, title]);
 
   const headerRight = useMemo<JSX.Element>(
     () => (

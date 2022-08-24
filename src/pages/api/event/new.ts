@@ -15,7 +15,7 @@ export const config = {
 export interface CreateEventProps {
   name: string;
   code: string;
-  meetingUrl?: string | null;
+  meetingCode?: string | null;
   organizerNickname: string;
   organizerBio?: string;
   organizerProfileImage?: File | Blob | null;

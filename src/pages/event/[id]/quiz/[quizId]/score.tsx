@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import _ from 'lodash';
 
 import { MeetworkApi } from '@/operations';
 
@@ -9,7 +10,6 @@ import EventLayout from '@/components/layout/EventLayout';
 import HeaderBackButton from '@/components/button/HeaderBackButton';
 import { withAuthSSR } from '@/utils/session/withAuth';
 import { QuizResult } from '@/domain/quiz/result';
-import _ from 'lodash';
 
 interface ScoreProps {
   eventId: string;
@@ -25,8 +25,8 @@ const Score: NextPage<ScoreProps> = ({ eventId, quizId }) => {
   const { data: score } = useSWR(['/api/event/result', quizId], () =>
     MeetworkApi.quiz.result(quizId),
   );
-  const { data: quiz } = useSWR(['/api/quiz/questions', quizId], () =>
-    MeetworkApi.quiz.get(quizId),
+  const { data: count } = useSWR(['/api/quiz/count', quizId], () =>
+    MeetworkApi.quiz.count(quizId),
   );
 
   const scoreList = useMemo<{ index: number; result: QuizResult }[]>(
@@ -76,7 +76,7 @@ const Score: NextPage<ScoreProps> = ({ eventId, quizId }) => {
             <span className="font-[400] text-[16px] text-black">{`${score.index}위. ${score.result.profile.nickname}`}</span>
             <span className="font-[400] text-[16px] text-black">{`${
               score.result.count
-            }/${quiz?.questions.length ?? 0}`}</span>
+            }/${count ?? 0}`}</span>
           </div>
         ))}
       </div>
