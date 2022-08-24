@@ -7,6 +7,7 @@ import FileApi from '@/operations/file';
 import InvitationApi from '@/operations/invitation';
 import PostApi from '@/operations/post';
 import ProfileApi from '@/operations/profile';
+import QuizApi from '@/operations/quiz';
 import UserApi from '@/operations/user';
 
 export const MeetworkApi = {
@@ -19,5 +20,6 @@ export const MeetworkApi = {
   invitation: InvitationApi,
   post: PostApi,
   profile: ProfileApi,
+  quiz: QuizApi,
   user: UserApi,
 };

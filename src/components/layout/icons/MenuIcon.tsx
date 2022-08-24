@@ -3,14 +3,17 @@ import { useRouter } from 'next/router';
 
 const reg = /^\/event\/[a-zA-Z0-9\-]+[a-zA-Z0-9]$/;
 const regBoard =
-  /^\/event\/[a-zA-Z0-9\-]+[a-zA-Z0-9]\/board\/[a-zA-Z0-9\-]+[a-zA-Z0-9]$/;
+  /^\/event\/[a-zA-Z0-9\-]+[a-zA-Z0-9]\/board\/[a-zA-Z0-9\-]+[a-zA-Z0-9]/;
+const regQuiz = /^\/event\/[a-zA-Z0-9\-]+[a-zA-Z0-9]\/quiz/;
 
 const MenuIcon: React.FC = () => {
   const router = useRouter();
 
   const color = useMemo(
     () =>
-      reg.test(router.asPath) || regBoard.test(router.asPath)
+      reg.test(router.asPath) ||
+      regBoard.test(router.asPath) ||
+      regQuiz.test(router.asPath)
         ? '#9BD1DD'
         : '#ECECEC',
     [router.asPath],
