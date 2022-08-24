@@ -22,6 +22,12 @@ module.exports = {
   },
   safelist: [
     {
+      pattern: /h-\w+/,
+    },
+    {
+      pattern: /p\w-\w+/,
+    },
+    {
       pattern: /bg-\w+/,
     },
     {

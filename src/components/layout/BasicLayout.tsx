@@ -10,7 +10,7 @@ export interface BasicLayoutProps {
     titleAlign?: 'left' | 'center';
     left?: JSX.Element;
     right?: JSX.Element;
-    color?: 'white' | 'black' | 'pink';
+    color?: 'white' | 'black' | 'pink' | 'transparent';
     textColor?: 'white' | 'black' | 'pink';
     style?: React.HTMLAttributes<JSX.IntrinsicElements['div']>['className'];
   };
