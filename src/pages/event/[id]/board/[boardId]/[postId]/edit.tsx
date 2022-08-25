@@ -145,7 +145,7 @@ const New: NextPage<NewProps> = ({ eventId, boardId, postId }) => {
           onChange={handleContentChange}
         />
 
-        <div className="absolute bottom-[60px] flex flex-row w-screen h-[144px] px-[20px] items-center overflow-y-auto overflow-x-auto overscroll-x-contain scrollbar-hide">
+        <div className="absolute bottom-[60px] flex flex-row w-screen max-h-[144px] px-[20px] items-center overflow-y-auto overflow-x-auto overscroll-x-contain scrollbar-hide">
           {images.map((image) => (
             <div
               key={image}

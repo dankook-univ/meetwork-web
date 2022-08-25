@@ -133,13 +133,13 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
         <div className="flex flex-1" />
 
         <div
-          className="sticky bottom-0 flex flex-row px-[16px] py-[14px] border-t-[1px] border-t-gray items-center"
+          className="sticky bottom-0 flex flex-row px-[16px] py-[14px] border-t-[1px] border-t-gray items-center bg-white"
           onClick={handleSetting}
         >
           <Image src="/icons/plus-circle.svg" width={24} height={24} alt="" />
 
           <span className="font-[600] text-[16px] text-lightGray ml-[8px]">
-            관리
+            설정
           </span>
         </div>
 

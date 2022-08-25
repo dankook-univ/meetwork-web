@@ -141,7 +141,7 @@ const Post: NextPage<PostProps> = ({ eventId, boardId, postId }) => {
             {content}
           </p>
 
-          <div className="flex flex-row w-[calc(100vw-32px)] h-[150px] mt-[16px] items-center overflow-y-auto overflow-x-auto overscroll-x-contain scrollbar-hide">
+          <div className="flex flex-row w-[calc(100vw-32px)] max-h-[150px] mt-[16px] items-center overflow-y-auto overflow-x-auto overscroll-x-contain scrollbar-hide">
             {images.map((image, index) => (
               <div key={index} className="flex-none mr-[16px]">
                 <Image
