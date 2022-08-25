@@ -24,10 +24,16 @@ export default withSessionRouter(
     const { code } = (await req.query) as { code: string };
 
     if (req.method === 'PATCH') {
+      const form = await getParsedForm(req);
+
       return fetcher<Event, FormData>({
         req,
         url: `/api/event/join/${code}`,
-        payload: await getParsedForm(req),
+        payload: form,
+        headers: {
+          ...form.getHeaders(),
+          'Content-Type': 'multipart/form-data',
+        },
       })
         .then((response) => {
           res.status(200).json(response.data);

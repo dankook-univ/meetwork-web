@@ -23,10 +23,16 @@ export default withSessionRouter(
     const { id } = (await req.query) as { id: string };
 
     if (req.method === 'PATCH') {
+      const form = await getParsedForm(req);
+
       return fetcher<boolean, FormData>({
         req,
         url: `/api/invitation/join/${id}`,
-        payload: await getParsedForm(req),
+        payload: form,
+        headers: {
+          ...form.getHeaders(),
+          'Content-Type': 'multipart/form-data',
+        },
       })
         .then((response) => {
           res.status(200).json(response.data);

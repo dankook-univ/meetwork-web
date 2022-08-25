@@ -14,10 +14,16 @@ export const config = {
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
+      const form = await getParsedForm(req);
+
       return fetcher({
         req,
         url: `/api/file/uploads`,
-        payload: await getParsedForm(req),
+        payload: form,
+        headers: {
+          ...form.getHeaders(),
+          'Content-Type': 'multipart/form-data',
+        },
       })
         .then((response) => {
           res.status(200).json(response.data);

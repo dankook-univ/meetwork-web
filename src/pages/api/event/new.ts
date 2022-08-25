@@ -24,11 +24,14 @@ export interface CreateEventProps {
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
+      const form = await getParsedForm(req)
+
       return fetcher<Event>({
         req,
         url: '/api/event/new',
-        payload: await getParsedForm(req),
+        payload: form,
         headers: {
+          ...form.getHeaders(),
           'Content-Type': 'multipart/form-data',
         },
       })

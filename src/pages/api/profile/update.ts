@@ -23,11 +23,14 @@ export interface ProfileUpdateProps {
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'PATCH') {
+      const form = await getParsedForm(req);
+
       return fetcher<Profile>({
         req,
         url: `/api/profile/update`,
-        payload: await getParsedForm(req),
+        payload: form,
         headers: {
+          ...form.getHeaders(),
           'Content-Type': 'multipart/form-data',
         },
       })
