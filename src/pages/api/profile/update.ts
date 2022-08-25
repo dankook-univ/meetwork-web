@@ -9,6 +9,7 @@ import { Profile } from '@/domain/user/profile';
 export const config = {
   api: {
     bodyParser: false,
+    responseLimit: '1024mb',
   },
 };
 

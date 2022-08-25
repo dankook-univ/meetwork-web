@@ -8,6 +8,7 @@ import { getParsedForm } from '@/utils/form/parsedForm';
 export const config = {
   api: {
     bodyParser: false,
+    responseLimit: '1024mb',
   },
 };
 

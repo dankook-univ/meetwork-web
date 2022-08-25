@@ -8,6 +8,7 @@ import { getParsedForm } from '@/utils/form/parsedForm';
 export const config = {
   api: {
     bodyParser: false,
+    responseLimit: '1024mb',
   },
 };
 
@@ -23,7 +24,7 @@ export default withSessionRouter(
         headers: {
           ...form.getHeaders(),
           'Content-Type': 'multipart/form-data',
-        }
+        },
       })
         .then((response) => {
           res.status(200).json(response.data);

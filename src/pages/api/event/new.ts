@@ -9,6 +9,7 @@ import { Event } from '@/domain/event/event';
 export const config = {
   api: {
     bodyParser: false,
+    responseLimit: '1024mb',
   },
 };
 
@@ -24,7 +25,7 @@ export interface CreateEventProps {
 export default withSessionRouter(
   async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
-      const form = await getParsedForm(req)
+      const form = await getParsedForm(req);
 
       return fetcher<Event>({
         req,
