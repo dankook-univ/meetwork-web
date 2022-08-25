@@ -70,11 +70,13 @@ const Profile: NextPage = () => {
         bio,
         profileImage: image,
       })
-      .then(() => {
+      .then(async () => {
         setJoinEvent({
           code: '',
           nickname: '',
         });
+
+        await router.replace('/');
       })
       .catch(async () => {
         await router.replace(`${router.asPath}?error=true`);
