@@ -26,7 +26,7 @@ const Index: NextPage = () => {
   );
 
   const hasMore = useMemo<boolean>(
-    () => !(events !== undefined && events.length < 10),
+    () => !(events !== undefined && events.length < 15),
     [events],
   );
 

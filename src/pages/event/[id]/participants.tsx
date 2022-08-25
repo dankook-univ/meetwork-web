@@ -34,7 +34,7 @@ const Participants: NextPage<ParticipantsProps> = ({ eventId }) => {
   );
 
   const hasMore = useMemo<boolean>(
-    () => !(members !== undefined && members.length < 10),
+    () => !(members !== undefined && members.length < 15),
     [members],
   );
 

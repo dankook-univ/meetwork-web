@@ -50,7 +50,7 @@ const Index: NextPage<IndexProps> = ({ eventId, boardId }) => {
   }, [posts]);
 
   const hasMore = useMemo<boolean>(
-    () => !(posts !== undefined && posts.length < 10),
+    () => !(posts !== undefined && posts.length < 15),
     [posts],
   );
 

@@ -74,12 +74,12 @@ const Index: NextPage<IndexProps> = ({ eventId }) => {
   }, [general]);
 
   const hasMoreAdmin = useMemo<boolean>(
-    () => !(admin !== undefined && admin.length < 10),
+    () => !(admin !== undefined && admin.length < 15),
     [admin],
   );
 
   const hasMoreGeneral = useMemo<boolean>(
-    () => !(general !== undefined && general.length < 10),
+    () => !(general !== undefined && general.length < 15),
     [general],
   );
 
