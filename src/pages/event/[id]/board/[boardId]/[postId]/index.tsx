@@ -23,7 +23,7 @@ interface PostProps {
 }
 
 const imageReg =
-  /!\[post_image]\(https:\/\/kr.object.ncloudstorage.com\/meetwork\/post\/[a-zA-Z0-9\-]+.(jpeg|png|jpg|gif)\)/g;
+  /!\[post_image]&#x28;https:&#x2F;&#x2F;kr.object.ncloudstorage.com&#x2F;meetwork&#x2F;post&#x2F;[a-zA-Z0-9\-]+.(jpeg|png|jpg|gif)&#x29;/g;
 
 const Post: NextPage<PostProps> = ({ eventId, boardId, postId }) => {
   const router = useRouter();
@@ -55,11 +55,12 @@ const Post: NextPage<PostProps> = ({ eventId, boardId, postId }) => {
 
   const images = useMemo<string[]>(
     () =>
-      post?.content
-        .match(imageReg)
-        ?.map((image) =>
-          image.replace('![post_image](', '').replace(')', ''),
-        ) ?? [],
+      post?.content.match(imageReg)?.map((image) =>
+        image
+          .replace('![post_image]&#x28;', '')
+          .replace('&#x29;', '')
+          .replaceAll(/&#x2F;/g, '/'),
+      ) ?? [],
     [post?.content],
   );
 

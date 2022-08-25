@@ -11,7 +11,7 @@ interface PostItemProps {
 }
 
 const imageReg =
-  /!\[post_image]\(https:\/\/kr.object.ncloudstorage.com\/meetwork\/post\/[a-zA-Z0-9\-]+.(jpeg|png|jpg|gif)\)/g;
+  /!\[post_image]&#x28;https:&#x2F;&#x2F;kr.object.ncloudstorage.com&#x2F;meetwork&#x2F;post&#x2F;[a-zA-Z0-9\-]+.(jpeg|png|jpg|gif)&#x29;/g;
 
 const PostItem: React.FC<PostItemProps> = ({ post }) => {
   const router = useRouter();

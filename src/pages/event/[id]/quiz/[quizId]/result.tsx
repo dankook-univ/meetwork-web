@@ -3,7 +3,6 @@ import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import _ from 'lodash';
 import { AnimatePresence, motion } from 'framer-motion';
 import classNames from 'classnames';
 
@@ -36,14 +35,7 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
   );
 
   const scoreList = useMemo<{ index: number; result: QuizResult }[]>(
-    () =>
-      _(result)
-        .orderBy((it) => it.count, 'desc')
-        .groupBy((it) => it.count)
-        .values()
-        .map((it, index) => it.map((result) => ({ index: index + 1, result })))
-        .flatten()
-        .value() ?? [],
+    () => result?.map((it, index) => ({ index: index + 1, result: it })) ?? [],
     [result],
   );
 

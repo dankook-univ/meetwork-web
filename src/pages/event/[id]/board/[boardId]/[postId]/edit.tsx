@@ -20,7 +20,7 @@ interface NewProps {
 }
 
 const imageReg =
-  /!\[post_image]\(https:\/\/kr.object.ncloudstorage.com\/meetwork\/post\/[a-zA-Z0-9\-]+.(jpeg|png|jpg|gif)\)/g;
+  /!\[post_image]&#x28;https:&#x2F;&#x2F;kr.object.ncloudstorage.com&#x2F;meetwork&#x2F;post&#x2F;[a-zA-Z0-9\-]+.(jpeg|png|jpg|gif)&#x29;/g;
 
 const New: NextPage<NewProps> = ({ eventId, boardId, postId }) => {
   const router = useRouter();
@@ -52,11 +52,12 @@ const New: NextPage<NewProps> = ({ eventId, boardId, postId }) => {
     } else {
       setContent(post?.content.replace(imageReg, '').trim() ?? '');
       setImages(
-        post?.content
-          .match(imageReg)
-          ?.map((image) =>
-            image.replace('![post_image](', '').replace(')', ''),
-          ) ?? [],
+        post?.content.match(imageReg)?.map((image) =>
+          image
+            .replace('![post_image]&#x28;', '')
+            .replace('&#x29;', '')
+            .replaceAll(/&#x2F;/g, '/'),
+        ) ?? [],
       );
     }
   }, [me?.id, post?.content, post?.writer.id, router]);

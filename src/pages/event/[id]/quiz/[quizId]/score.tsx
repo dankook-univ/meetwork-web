@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import _ from 'lodash';
 
 import { MeetworkApi } from '@/operations';
 
@@ -30,14 +29,7 @@ const Score: NextPage<ScoreProps> = ({ eventId, quizId }) => {
   );
 
   const scoreList = useMemo<{ index: number; result: QuizResult }[]>(
-    () =>
-      _(score)
-        .orderBy((it) => it.count, 'desc')
-        .groupBy((it) => it.count)
-        .values()
-        .map((it, index) => it.map((result) => ({ index: index + 1, result })))
-        .flatten()
-        .value() ?? [],
+    () => score?.map((it, index) => ({ index: index + 1, result: it })) ?? [],
     [score],
   );
 
