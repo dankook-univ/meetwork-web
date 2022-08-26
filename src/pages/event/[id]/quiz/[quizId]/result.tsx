@@ -13,16 +13,19 @@ import { QuizResult } from '@/domain/quiz/result';
 import EventLayout from '@/components/layout/EventLayout';
 import Conditional from '@/hocs/Conditional';
 import CustomButton from '@/components/button/CustomButton';
+import MailInfoModal from '@/components/event/modal/MailInfoModal';
 
 interface ResultProps {
   eventId: string;
   quizId: string;
 }
 
-const Result: NextPage<ResultProps> = ({ quizId }) => {
+const Result: NextPage<ResultProps> = ({ eventId, quizId }) => {
   const router = useRouter();
 
   const [open, setOpen] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>('');
+  const [mailOpen, setMailOpen] = useState<boolean>(false);
 
   const { data: result } = useSWR(['/api/quiz/result', quizId], () =>
     MeetworkApi.quiz.result(quizId),
@@ -47,6 +50,22 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
     setOpen((prev) => !prev);
   }, []);
 
+  const handleSendMail = useCallback(async () => {
+    await MeetworkApi.email
+      .send(eventId, {
+        title: `${result?.at(0)?.quiz.name ?? ''}`,
+        content: `${me?.profile.nickname ?? ''}님은 ${
+          scoreList.find((it) => it.result.id === me?.id)?.index ?? ''
+        }위를 했어요!`,
+      })
+      .then((res) => {
+        if (res?.length > 0) {
+          setEmail(res);
+          setMailOpen(true);
+        }
+      });
+  }, [eventId, me?.id, me?.profile.nickname, result, scoreList]);
+
   return (
     <EventLayout
       header={{
@@ -55,11 +74,26 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
       footerShown={false}
     >
       <div className="flex flex-1 flex-col">
-        <div className="flex flex-col pt-[70px] pb-[20px] items-center">
-          <span className="font-[600] text-[20px] text-black">퀴즈 결과</span>
-          <span className="font-[400] text-[14px] text-black mt-[3px]">
-            다들 수고하셨습니다!
-          </span>
+        <div className="flex flex-row w-full px-[16px] pt-[70px] pb-[20px] items-center justify-between">
+          <section className="flex w-[24px] h-[24px] items-center justify-center" />
+
+          <section>
+            <div className="flex flex-col items-center">
+              <span className="font-[600] text-[20px] text-black">
+                퀴즈 결과
+              </span>
+              <span className="font-[400] text-[14px] text-black mt-[3px]">
+                다들 수고하셨습니다!
+              </span>
+            </div>
+          </section>
+
+          <section
+            className="flex w-[24px] h-[24px] items-center justify-center"
+            onClick={handleSendMail}
+          >
+            <Image src="/icons/send-mail.svg" width={24} height={24} alt="" />
+          </section>
         </div>
 
         <AnimatePresence initial={false}>
@@ -283,6 +317,12 @@ const Result: NextPage<ResultProps> = ({ quizId }) => {
             </Conditional>
           </motion.section>
         </AnimatePresence>
+
+        <MailInfoModal
+          visible={mailOpen}
+          setVisible={setMailOpen}
+          email={email}
+        />
       </div>
     </EventLayout>
   );

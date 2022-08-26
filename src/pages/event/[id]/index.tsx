@@ -3,6 +3,7 @@ import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import _ from 'lodash';
 
 import { withAuthSSR } from '@/utils/session/withAuth';
 import { MeetworkApi } from '@/operations';
@@ -93,9 +94,12 @@ const Event: NextPage<EventProps> = ({ eventId }) => {
             <span className="font-[600] text-[16px] text-black">채팅</span>
           </header>
 
-          {rooms?.map((room) => (
-            <ChannelItem key={room.id} channel={room} />
-          ))}
+          {_(rooms ?? [])
+            .uniqBy((it) => it.id)
+            .value()
+            ?.map((room) => (
+              <ChannelItem key={room.id} channel={room} />
+            ))}
         </section>
 
         <Conditional
